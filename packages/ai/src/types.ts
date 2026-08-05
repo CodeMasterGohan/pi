@@ -52,8 +52,6 @@ export type KnownProvider =
 	| "opencode"
 	| "opencode-go"
 	| "kimi-coding"
-	| "cloudflare-workers-ai"
-	| "cloudflare-ai-gateway"
 	| "qwen-token-plan"
 	| "qwen-token-plan-cn"
 	| "xiaomi"

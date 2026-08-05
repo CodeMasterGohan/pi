@@ -2,8 +2,6 @@ import { createImagesModels, type ImagesProvider, type MutableImagesModels } fro
 import { MODELS } from "../models.generated.ts";
 import { type CreateModelsOptions, createModels, type MutableModels, type Provider } from "../models.ts";
 import type { Api, Model } from "../types.ts";
-import { cloudflareAIGatewayProvider } from "./cloudflare-ai-gateway.ts";
-import { cloudflareWorkersAIProvider } from "./cloudflare-workers-ai.ts";
 import modelDataManifest from "./data/.manifest.json" with { type: "json" };
 import { deepseekProvider } from "./deepseek.ts";
 import { githubCopilotProvider } from "./github-copilot.ts";
@@ -78,8 +76,6 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 /** All built-in providers, freshly constructed. */
 export function builtinProviders(): Provider[] {
 	return [
-		cloudflareAIGatewayProvider(),
-		cloudflareWorkersAIProvider(),
 		deepseekProvider(),
 		githubCopilotProvider(),
 		googleProvider(),
