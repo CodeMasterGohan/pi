@@ -36,7 +36,6 @@ export type KnownProvider =
 	| "openai-codex"
 	| "radius"
 	| "nvidia"
-	| "github-copilot"
 	| "xai"
 	| "openrouter"
 	| "vercel-ai-gateway"

@@ -66,9 +66,6 @@ function hasVertexAdcCredentials(env?: ProviderEnv): boolean {
 }
 
 function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
-	if (provider === "github-copilot") {
-		return ["COPILOT_GITHUB_TOKEN"];
-	}
 
 	const envMap: Record<string, string> = {
 		"qwen-token-plan": "QWEN_TOKEN_PLAN_API_KEY",

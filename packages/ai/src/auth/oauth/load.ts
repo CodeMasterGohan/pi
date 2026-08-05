@@ -13,7 +13,7 @@ const importOAuthModule = (specifier: string): Promise<unknown> => {
 
 type OAuthFlowLoaders = {
 	openaiCodex: () => OAuthAuth | Promise<OAuthAuth>;
-	githubCopilot: () => OAuthAuth | Promise<OAuthAuth>;
+
 	openrouter: () => OAuthAuth | Promise<OAuthAuth>;
 	kimiCoding: () => OAuthAuth | Promise<OAuthAuth>;
 	xai: () => OAuthAuth | Promise<OAuthAuth>;
@@ -32,10 +32,7 @@ export const loadOpenAICodexOAuth = async (): Promise<OAuthAuth> => {
 	return ((await importOAuthModule("./openai-codex.ts")) as { openaiCodexOAuth: OAuthAuth }).openaiCodexOAuth;
 };
 
-export const loadGitHubCopilotOAuth = async (): Promise<OAuthAuth> => {
-	if (bundledLoaders) return bundledLoaders.githubCopilot();
-	return ((await importOAuthModule("./github-copilot.ts")) as { githubCopilotOAuth: OAuthAuth }).githubCopilotOAuth;
-};
+
 
 export const loadOpenRouterOAuth = async (): Promise<OAuthAuth> => {
 	if (bundledLoaders) return bundledLoaders.openrouter();

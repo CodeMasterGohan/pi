@@ -1,5 +1,4 @@
-import { expect, expectTypeOf, it } from "vitest";
-import { GITHUB_COPILOT_MODELS } from "../src/providers/github-copilot.models.ts";
+import { expectTypeOf, it } from "vitest";
 import { XAI_MODELS } from "../src/providers/xai.models.ts";
 
 it("derives model API, ID, and provider literals from grouped model data", () => {
@@ -9,7 +8,3 @@ it("derives model API, ID, and provider literals from grouped model data", () =>
 	expectTypeOf(XAI_MODELS["grok-4.3"].api).toEqualTypeOf<"openai-completions">();
 });
 
-it("routes GitHub Copilot Grok 4.5 through the Responses API", () => {
-	expectTypeOf(GITHUB_COPILOT_MODELS["grok-4.5"].api).toEqualTypeOf<"openai-responses">();
-	expect(GITHUB_COPILOT_MODELS["grok-4.5"].api).toBe("openai-responses");
-});
