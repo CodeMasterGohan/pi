@@ -3,10 +3,8 @@ import { MODELS } from "../models.generated.ts";
 import { type CreateModelsOptions, createModels, type MutableModels, type Provider } from "../models.ts";
 import type { Api, Model } from "../types.ts";
 import { amazonBedrockProvider } from "./amazon-bedrock.ts";
-import { antLingProvider } from "./ant-ling.ts";
 import { anthropicProvider } from "./anthropic.ts";
 import { azureOpenAIResponsesProvider } from "./azure-openai-responses.ts";
-import { basetenProvider } from "./baseten.ts";
 import { cerebrasProvider } from "./cerebras.ts";
 import { cloudflareAIGatewayProvider } from "./cloudflare-ai-gateway.ts";
 import { cloudflareWorkersAIProvider } from "./cloudflare-workers-ai.ts";
@@ -88,10 +86,8 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 export function builtinProviders(): Provider[] {
 	return [
 		amazonBedrockProvider(),
-		antLingProvider(),
 		anthropicProvider(),
 		azureOpenAIResponsesProvider(),
-		basetenProvider(),
 		cerebrasProvider(),
 		cloudflareAIGatewayProvider(),
 		cloudflareWorkersAIProvider(),

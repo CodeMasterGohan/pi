@@ -33,7 +33,6 @@ export type ImagesApi = KnownImagesApi | (string & {});
 
 export type KnownProvider =
 	| "amazon-bedrock"
-	| "ant-ling"
 	| "anthropic"
 	| "google"
 	| "google-vertex"
@@ -59,7 +58,6 @@ export type KnownProvider =
 	| "huggingface"
 	| "fireworks"
 	| "together"
-	| "baseten"
 	| "opencode"
 	| "opencode-go"
 	| "kimi-coding"
@@ -558,13 +556,11 @@ export interface OpenAICompletionsCompat {
 		| "openrouter"
 		| "deepseek"
 		| "together"
-		| "baseten"
 		| "zai"
 		| "qwen"
 		| "chat-template"
 		| "qwen-chat-template"
-		| "string-thinking"
-		| "ant-ling";
+		| "string-thinking";
 	/** Kwargs to send as `chat_template_kwargs` when `thinkingFormat` is `chat-template`. Use `{ "$var": "thinking.enabled" }` or `{ "$var": "thinking.effort" }` for pi-controlled thinking values. */
 	chatTemplateKwargs?: Record<string, ChatTemplateKwargValue>;
 	/** Arguments to send as `chat_template_args` when `thinkingFormat` is `baseten`. Use `{ "$var": "thinking.enabled" }` or `{ "$var": "thinking.effort" }` for pi-controlled thinking values. */

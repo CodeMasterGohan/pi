@@ -771,23 +771,6 @@ function buildParams(
 		if (chatTemplateKwargs) {
 			(params as any).chat_template_kwargs = chatTemplateKwargs;
 		}
-	} else if (compat.thinkingFormat === "baseten" && model.reasoning) {
-		const basetenParams = params as Omit<typeof params, "reasoning_effort"> & {
-			chat_template_args?: Record<string, ResolvedChatTemplateKwargValue>;
-			reasoning_effort?: string;
-		};
-		const chatTemplateArgs = buildChatTemplateValues(model, options, compat.chatTemplateArgs);
-		if (chatTemplateArgs) {
-			basetenParams.chat_template_args = chatTemplateArgs;
-		}
-		if (compat.supportsReasoningEffort) {
-			const requestedEffort = options?.reasoningEffort;
-			const mappedEffort = requestedEffort ? model.thinkingLevelMap?.[requestedEffort] : model.thinkingLevelMap?.off;
-			const effort = mappedEffort === undefined ? requestedEffort : mappedEffort;
-			if (typeof effort === "string") {
-				basetenParams.reasoning_effort = effort;
-			}
-		}
 	} else if (compat.thinkingFormat === "deepseek" && model.reasoning) {
 		if (options?.reasoningEffort) {
 			(params as any).thinking = { type: "enabled" };
@@ -807,11 +790,6 @@ function buildParams(
 			};
 		} else if (model.thinkingLevelMap?.off !== null) {
 			openRouterParams.reasoning = { effort: model.thinkingLevelMap?.off ?? "none" };
-		}
-	} else if (compat.thinkingFormat === "ant-ling" && model.reasoning && options?.reasoningEffort) {
-		const effort = model.thinkingLevelMap?.[options.reasoningEffort];
-		if (typeof effort === "string") {
-			(params as typeof params & { reasoning?: { effort: string } }).reasoning = { effort };
 		}
 	} else if (compat.thinkingFormat === "together" && model.reasoning) {
 		const togetherParams = params as Omit<typeof params, "reasoning_effort"> & {
@@ -1430,7 +1408,6 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 	const isCloudflareWorkersAI = provider === "cloudflare-workers-ai" || baseUrl.includes("api.cloudflare.com");
 	const isCloudflareAiGateway = provider === "cloudflare-ai-gateway" || baseUrl.includes("gateway.ai.cloudflare.com");
 	const isNvidia = provider === "nvidia" || baseUrl.includes("integrate.api.nvidia.com");
-	const isAntLing = provider === "ant-ling" || baseUrl.includes("api.ant-ling.com");
 
 	const isNonStandard =
 		isNvidia ||
@@ -1446,17 +1423,10 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 		provider === "opencode" ||
 		baseUrl.includes("opencode.ai") ||
 		isCloudflareWorkersAI ||
-		isCloudflareAiGateway ||
-		isAntLing;
+		isCloudflareAiGateway;
 
 	const useMaxTokens =
-		baseUrl.includes("chutes.ai") ||
-		isMoonshot ||
-		isCloudflareAiGateway ||
-		isTogether ||
-		isNvidia ||
-		isAntLing ||
-		isZai;
+		baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isTogether || isNvidia || isZai;
 
 	const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
 	const isDeepSeek = provider === "deepseek" || baseUrl.includes("deepseek.com");
@@ -1467,8 +1437,7 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 	return {
 		supportsStore: !isNonStandard,
 		supportsDeveloperRole: isOpenRouterDeveloperRoleModel || (!isNonStandard && !isOpenRouter),
-		supportsReasoningEffort:
-			!isGrok && !isZai && !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia && !isAntLing,
+		supportsReasoningEffort: !isGrok && !isZai && !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia,
 		supportsUsageInStreaming: true,
 		supportsFinishReason: true,
 		maxTokensField: useMaxTokens ? "max_tokens" : "max_completion_tokens",
@@ -1482,11 +1451,9 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 				? "zai"
 				: isTogether
 					? "together"
-					: isAntLing
-						? "ant-ling"
-						: isOpenRouter
-							? "openrouter"
-							: "openai",
+					: isOpenRouter
+						? "openrouter"
+						: "openai",
 		openRouterRouting: {},
 		vercelGatewayRouting: {},
 		chatTemplateKwargs: {},
@@ -1498,13 +1465,7 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 		sendSessionAffinityHeaders: false,
 		deferredToolsMode: undefined,
 		sessionAffinityFormat: isOpenRouter ? "openrouter" : "openai",
-		supportsLongCacheRetention: !(
-			isTogether ||
-			isCloudflareWorkersAI ||
-			isCloudflareAiGateway ||
-			isNvidia ||
-			isAntLing
-		),
+		supportsLongCacheRetention: !(isTogether || isCloudflareWorkersAI || isCloudflareAiGateway || isNvidia),
 	};
 }
 

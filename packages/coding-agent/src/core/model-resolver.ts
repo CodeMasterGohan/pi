@@ -19,7 +19,6 @@ import type { ModelRuntime } from "./model-runtime.ts";
 /** Default model IDs for each known provider */
 export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	"amazon-bedrock": "us.anthropic.claude-opus-4-6-v1",
-	"ant-ling": "Ring-2.6-1T",
 	anthropic: "claude-opus-4-8",
 	openai: "gpt-5.5",
 	"azure-openai-responses": "gpt-5.4",
@@ -45,7 +44,6 @@ export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	huggingface: "moonshotai/Kimi-K2.6",
 	fireworks: "accounts/fireworks/models/kimi-k2p6",
 	together: "moonshotai/Kimi-K2.6",
-	baseten: "zai-org/GLM-5.2",
 	opencode: "kimi-k2.6",
 	"opencode-go": "kimi-k2.6",
 	"kimi-coding": "kimi-for-coding",
