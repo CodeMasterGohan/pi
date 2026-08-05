@@ -3,7 +3,6 @@
 // Requires ANTHROPIC_API_KEY.
 
 import { createModels } from "../src/models.ts";
-import { anthropicProvider } from "../src/providers/anthropic.ts";
 import type { Context } from "../src/types.ts";
 
 // ---------------------------------------------------------------------------
@@ -12,13 +11,12 @@ import type { Context } from "../src/types.ts";
 // ---------------------------------------------------------------------------
 
 const models = createModels();
-models.setProvider(anthropicProvider());
 
 // ---------------------------------------------------------------------------
 // 2. Look up a model and check auth.
 // ---------------------------------------------------------------------------
 
-const model = models.getModel("anthropic", "claude-haiku-4-5");
+const model = models.getModel("openrouter", "anthropic/claude-haiku-4.5");
 if (!model) throw new Error("model not found");
 
 const auth = await models.getAuth(model.provider);

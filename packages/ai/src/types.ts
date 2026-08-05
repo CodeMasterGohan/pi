@@ -30,7 +30,6 @@ export type KnownImagesApi = "openrouter-images";
 export type ImagesApi = KnownImagesApi | (string & {});
 
 export type KnownProvider =
-	| "anthropic"
 	| "google"
 	| "google-vertex"
 	| "openai"

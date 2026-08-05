@@ -262,7 +262,7 @@ describe("Tool Results with Images", () => {
 	});
 
 	describe.skipIf(!process.env.ANTHROPIC_API_KEY)("Anthropic Provider (claude-haiku-4-5)", () => {
-		const model = getModel("anthropic", "claude-haiku-4-5");
+		const model = getModel("openrouter", "anthropic/claude-haiku-4.5");
 
 		it("should handle tool result with only image", { retry: 3, timeout: 30000 }, async () => {
 			await handleToolWithImageResult(model);
@@ -420,7 +420,7 @@ describe("Tool Results with Images", () => {
 	// =========================================================================
 
 	describe("Anthropic OAuth Provider (claude-sonnet-4-5)", () => {
-		const model = getModel("anthropic", "claude-sonnet-4-5");
+		const model = getModel("openrouter", "anthropic/claude-sonnet-4.5");
 
 		it.skipIf(!anthropicOAuthToken)(
 			"should handle tool result with only image",

@@ -5,7 +5,6 @@ import type { AuthContext, AuthEvent } from "../src/auth/types.ts";
 import { createModels, createProvider } from "../src/models.ts";
 import { InMemoryModelsStore } from "../src/models-store.ts";
 import { builtinModels, builtinProviders, getBuiltinModel } from "../src/providers/all.ts";
-import { anthropicProvider } from "../src/providers/anthropic.ts";
 import { cloudflareAIGatewayProvider } from "../src/providers/cloudflare-ai-gateway.ts";
 import { cloudflareWorkersAIProvider } from "../src/providers/cloudflare-workers-ai.ts";
 import { fauxAssistantMessage, fauxProvider } from "../src/providers/faux.ts";
@@ -62,7 +61,6 @@ describe("builtin providers", () => {
 			supportsStrictMode: true,
 			supportsOpenAIGrammarTools: true,
 		});
-		expect(getBuiltinModel("anthropic", "claude-haiku-4-5").compat?.supportsStrictTools).toBe(true);
 	});
 
 	it("uses official Kimi K3 pricing for Moonshot providers", () => {
@@ -87,33 +85,6 @@ describe("builtin providers", () => {
 		for (const [modelId, cost] of Object.entries(expectedCosts)) {
 			expect(models.getModel("kimi-coding", modelId)?.cost).toEqual(cost);
 		}
-	});
-
-	it("resolves Anthropic bearer auth from env with auth token precedence", async () => {
-		const models = createModels({
-			authContext: fakeAuthContext({
-				ANTHROPIC_AUTH_TOKEN: "auth-token",
-				ANTHROPIC_OAUTH_TOKEN: "oauth-token",
-				ANTHROPIC_API_KEY: "api-key",
-			}),
-		});
-		models.setProvider(anthropicProvider());
-
-		expect(await models.getAuth("anthropic")).toEqual({
-			auth: { headers: { Authorization: "Bearer auth-token" } },
-			source: "ANTHROPIC_AUTH_TOKEN",
-		});
-	});
-
-	it("preserves Anthropic OAuth token precedence over the API key", async () => {
-		const models = createModels({
-			authContext: fakeAuthContext({ ANTHROPIC_API_KEY: "key", ANTHROPIC_OAUTH_TOKEN: "oauth-token" }),
-		});
-		models.setProvider(anthropicProvider());
-
-		const result = await models.getAuth("anthropic");
-		expect(result?.auth.apiKey).toBe("oauth-token");
-		expect(result?.source).toBe("ANTHROPIC_OAUTH_TOKEN");
 	});
 
 	it("requires Cloudflare Workers AI account config and returns scoped env", async () => {

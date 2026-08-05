@@ -70,12 +70,6 @@ function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 		return ["COPILOT_GITHUB_TOKEN"];
 	}
 
-	// ANTHROPIC_AUTH_TOKEN participates in env discovery/status, but
-	// getEnvApiKey() skips it because requests must pass it as Authorization: Bearer.
-	if (provider === "anthropic") {
-		return [ANTHROPIC_AUTH_TOKEN_ENV, ANTHROPIC_OAUTH_TOKEN_ENV, ANTHROPIC_API_KEY_ENV];
-	}
-
 	const envMap: Record<string, string> = {
 		"qwen-token-plan": "QWEN_TOKEN_PLAN_API_KEY",
 		"qwen-token-plan-cn": "QWEN_TOKEN_PLAN_CN_API_KEY",

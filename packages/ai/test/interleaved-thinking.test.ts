@@ -120,12 +120,12 @@ const hasAnthropicCredentials = !!getEnvApiKey("anthropic");
 
 describe.skipIf(!hasAnthropicCredentials)("Anthropic interleaved thinking", () => {
 	it("should do interleaved thinking on Claude Opus 4.5", { retry: 3 }, async () => {
-		const llm = getModel("anthropic", "claude-opus-4-5");
+		const llm = getModel("openrouter", "anthropic/claude-opus-4.5");
 		await assertSecondToolCallWithInterleavedThinking(llm, "high");
 	});
 
 	it("should do interleaved thinking on Claude Opus 4.6", { retry: 3 }, async () => {
-		const llm = getModel("anthropic", "claude-opus-4-6");
+		const llm = getModel("openrouter", "anthropic/claude-opus-4.6");
 		await assertSecondToolCallWithInterleavedThinking(llm, "high");
 	});
 });
