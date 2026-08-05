@@ -32,7 +32,6 @@ export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openrouter: "moonshotai/kimi-k2.6",
 	"vercel-ai-gateway": "zai/glm-5.1",
 	xai: "grok-4.5",
-	groq: "openai/gpt-oss-120b",
 	zai: "glm-5.1",
 	"zai-coding-cn": "glm-5.1",
 	mistral: "devstral-medium-latest",

@@ -12,7 +12,6 @@ import { deepseekProvider } from "./deepseek.ts";
 import { githubCopilotProvider } from "./github-copilot.ts";
 import { googleProvider } from "./google.ts";
 import { googleVertexProvider } from "./google-vertex.ts";
-import { groqProvider } from "./groq.ts";
 import { huggingfaceProvider } from "./huggingface.ts";
 import { kimiCodingProvider } from "./kimi-coding.ts";
 import { minimaxProvider } from "./minimax.ts";
@@ -92,7 +91,6 @@ export function builtinProviders(): Provider[] {
 		githubCopilotProvider(),
 		googleProvider(),
 		googleVertexProvider(),
-		groqProvider(),
 		huggingfaceProvider(),
 		kimiCodingProvider(),
 		minimaxProvider(),

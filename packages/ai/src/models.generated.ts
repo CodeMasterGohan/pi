@@ -10,7 +10,6 @@ import { DEEPSEEK_MODELS } from "./providers/deepseek.models.ts";
 import { GITHUB_COPILOT_MODELS } from "./providers/github-copilot.models.ts";
 import { GOOGLE_MODELS } from "./providers/google.models.ts";
 import { GOOGLE_VERTEX_MODELS } from "./providers/google-vertex.models.ts";
-import { GROQ_MODELS } from "./providers/groq.models.ts";
 import { HUGGINGFACE_MODELS } from "./providers/huggingface.models.ts";
 import { KIMI_CODING_MODELS } from "./providers/kimi-coding.models.ts";
 import { MINIMAX_MODELS } from "./providers/minimax.models.ts";
@@ -46,7 +45,6 @@ export const MODELS: {
 	readonly "github-copilot": typeof GITHUB_COPILOT_MODELS;
 	readonly "google": typeof GOOGLE_MODELS;
 	readonly "google-vertex": typeof GOOGLE_VERTEX_MODELS;
-	readonly "groq": typeof GROQ_MODELS;
 	readonly "huggingface": typeof HUGGINGFACE_MODELS;
 	readonly "kimi-coding": typeof KIMI_CODING_MODELS;
 	readonly "minimax": typeof MINIMAX_MODELS;
@@ -81,7 +79,6 @@ export const MODELS: {
 	"github-copilot": GITHUB_COPILOT_MODELS,
 	"google": GOOGLE_MODELS,
 	"google-vertex": GOOGLE_VERTEX_MODELS,
-	"groq": GROQ_MODELS,
 	"huggingface": HUGGINGFACE_MODELS,
 	"kimi-coding": KIMI_CODING_MODELS,
 	"minimax": MINIMAX_MODELS,

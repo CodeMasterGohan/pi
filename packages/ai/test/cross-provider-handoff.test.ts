@@ -102,8 +102,6 @@ const PROVIDER_MODEL_PAIRS: ProviderModelPair[] = [
 		label: "cloudflare-gateway-gpt-5.1",
 		upstreamApiKeyEnv: "OPENAI_API_KEY",
 	},
-	// Groq
-	{ provider: "groq", model: "openai/gpt-oss-120b", label: "groq-gpt-oss-120b" },
 	// Hugging Face
 	{ provider: "huggingface", model: "moonshotai/Kimi-K2.5", label: "huggingface-kimi-k2.5" },
 	// Together AI

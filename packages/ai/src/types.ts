@@ -44,7 +44,6 @@ export type KnownProvider =
 	| "deepseek"
 	| "github-copilot"
 	| "xai"
-	| "groq"
 	| "openrouter"
 	| "vercel-ai-gateway"
 	| "zai"
