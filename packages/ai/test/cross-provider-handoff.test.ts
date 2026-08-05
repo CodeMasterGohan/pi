@@ -27,7 +27,7 @@ import { Type } from "typebox";
 import { beforeAll, describe, expect, it } from "vitest";
 import { completeSimple, getEnvApiKey, getModel } from "../src/compat.ts";
 import type { Api, AssistantMessage, Message, Model, Tool, ToolResultMessage } from "../src/types.ts";
-import { hasAzureOpenAICredentials } from "./azure-utils.ts";
+
 import { hasCloudflareAiGatewayCredentials, hasCloudflareWorkersAICredentials } from "./cloudflare-utils.ts";
 import { resolveApiKey } from "./oauth.ts";
 
@@ -150,9 +150,6 @@ async function getApiKey(provider: string): Promise<string | undefined> {
  * Synchronous check for API key availability (env vars only, for skipIf)
  */
 function hasApiKey(pair: ProviderModelPair): boolean {
-	if (pair.provider === "azure-openai-responses") {
-		return hasAzureOpenAICredentials();
-	}
 	if (pair.provider === "cloudflare-workers-ai") {
 		return hasCloudflareWorkersAICredentials();
 	}
