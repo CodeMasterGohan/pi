@@ -856,9 +856,6 @@ function applyThinkingLevelMetadata(model: Model<any>): void {
 	if (model.provider === "openrouter" && model.id === "z-ai/glm-5.2") {
 		mergeThinkingLevelMap(model, { xhigh: "xhigh" });
 	}
-	if (model.provider === "fireworks" && model.id.includes("glm-5p2")) {
-		mergeThinkingLevelMap(model, { off: "none", minimal: null, low: "high", medium: "high", max: "max" });
-	}
 	if (model.provider === "opencode-go" && model.id === "glm-5.2") {
 		mergeThinkingLevelMap(model, OPENCODE_GO_GLM52_THINKING_LEVEL_MAP);
 	}
@@ -1498,43 +1495,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 			}
 		}
 
-		// Process Fireworks models
-		if (data["fireworks-ai"]?.models) {
-			for (const [modelId, model] of Object.entries(data["fireworks-ai"].models)) {
-				const m = model as ModelsDevModel;
-				if (m.tool_call !== true) continue;
 
-				models.push({
-					id: modelId,
-					name: m.name || modelId,
-					api: "anthropic-messages",
-					provider: "fireworks",
-					// Fireworks Anthropic-compatible API - SDK appends /v1/messages
-					baseUrl: "https://api.fireworks.ai/inference",
-					reasoning: m.reasoning === true,
-					input: m.modalities?.input?.includes("image") ? ["text", "image"] : ["text"],
-					cost: {
-						input: m.cost?.input || 0,
-						output: m.cost?.output || 0,
-						cacheRead: m.cost?.cache_read || 0,
-						cacheWrite: m.cost?.cache_write || 0,
-					},
-					contextWindow: m.limit?.context || 4096,
-					maxTokens: m.limit?.output || 4096,
-					// Fireworks prompt caching uses automatic prefix matching + session affinity.
-					// x-session-affinity routes requests to the same replica for cache hits.
-					// cache_control on tools and eager_input_streaming are not supported.
-					// See: https://docs.fireworks.ai/tools-sdks/anthropic-compatibility
-					compat: {
-						sendSessionAffinityHeaders: true,
-						supportsEagerToolInputStreaming: false,
-						supportsCacheControlOnTools: false,
-						supportsLongCacheRetention: false,
-					},
-				});
-				recordModelsDevReasoningOptions("fireworks", modelId, m);
-			}
-		}
 
 		// Process NVIDIA NIM models
 		if (data.nvidia?.models) {
@@ -2126,24 +2087,6 @@ async function generateModels() {
 			candidate.cost.input = 0.6;
 			candidate.cost.output = 1.9;
 			candidate.cost.cacheRead = 0.119;
-		}
-		if (candidate.provider === "fireworks" && candidate.id.includes("glm-5p2")) {
-			candidate.api = "openai-completions";
-			candidate.baseUrl = "https://api.fireworks.ai/inference/v1";
-			candidate.compat = { supportsStore: false, supportsDeveloperRole: false };
-		}
-		if (candidate.provider === "fireworks" && candidate.id.includes("kimi-k3")) {
-			candidate.api = "openai-completions";
-			candidate.baseUrl = "https://api.fireworks.ai/inference/v1";
-			candidate.compat = {
-				supportsStore: false,
-				supportsDeveloperRole: false,
-				requiresReasoningContentOnAssistantMessages: true,
-				thinkingFormat: "openai",
-				deferredToolsMode: "kimi",
-				sendSessionAffinityHeaders: true,
-				supportsLongCacheRetention: false,
-			};
 		}
 	}
 
