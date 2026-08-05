@@ -810,11 +810,7 @@ function getAnthropicMessagesCompat(provider: string, modelId: string): Anthropi
 	return Object.keys(compat).length > 0 ? compat : undefined;
 }
 
-function getBedrockBaseUrl(modelId: string): string {
-	return modelId.startsWith("eu.")
-		? "https://bedrock-runtime.eu-central-1.amazonaws.com"
-		: "https://bedrock-runtime.us-east-1.amazonaws.com";
-}
+
 
 function normalizeNvidiaModelId(modelId: string): string {
 	return modelId.toLowerCase().replaceAll("_", ".");
@@ -1001,47 +997,6 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 
 		const models: Model<any>[] = [];
 		const nvidiaNimModelIds = data.nvidia?.models ? await fetchNvidiaNimModelIds() : new Map<string, string>();
-
-		// Process Amazon Bedrock models
-		if (data["amazon-bedrock"]?.models) {
-			for (const [modelId, model] of Object.entries(data["amazon-bedrock"].models)) {
-				const m = model as ModelsDevModel;
-				if (m.tool_call !== true) continue;
-				if (BEDROCK_INFERENCE_PROFILE_ONLY_MODEL_IDS.has(modelId)) continue;
-
-				let id = modelId;
-
-				if (id.startsWith("ai21.jamba")) {
-					// These models doesn't support tool use in streaming mode
-					continue;
-				}
-
-				if (id.startsWith("mistral.mistral-7b-instruct-v0")) {
-					// These models doesn't support system messages
-					continue;
-				}
-
-				models.push({
-					id,
-					name: m.name || id,
-					api: "bedrock-converse-stream" as const,
-					provider: "amazon-bedrock" as const,
-					baseUrl: getBedrockBaseUrl(id),
-					reasoning: m.reasoning === true,
-					input: (m.modalities?.input?.includes("image") ? ["text", "image"] : ["text"]) as ("text" | "image")[],
-					cost: {
-						input: m.cost?.input || 0,
-						output: m.cost?.output || 0,
-						cacheRead: m.cost?.cache_read || 0,
-						cacheWrite: m.cost?.cache_write || 0,
-					},
-					contextWindow: m.limit?.context || 4096,
-					maxTokens: m.limit?.output || 4096,
-					...(m.structured_output === true && { compat: { supportsStrictMode: true } }),
-				});
-				recordModelsDevReasoningOptions("amazon-bedrock" as const, id, m);
-			}
-		}
 
 		// Process Anthropic models
 		if (data.anthropic?.models) {

@@ -10,7 +10,6 @@
 // error-body.test.ts.
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { streamSimple as streamSimpleBedrock } from "../src/api/bedrock-converse-stream.ts";
 import { stream as streamOpenAICompletions } from "../src/api/openai-completions.ts";
 import { stream as streamOpenAIResponses } from "../src/api/openai-responses.ts";
 import type { Context, Model } from "../src/types.ts";
@@ -87,8 +86,6 @@ vi.mock("@aws-sdk/client-bedrock-runtime", () => {
 		ToolResultStatus: { ERROR: "error", SUCCESS: "success" },
 	};
 });
-
-import { getModel } from "../src/compat.ts";
 
 const context: Context = {
 	systemPrompt: "",
@@ -169,45 +166,5 @@ describe("provider error body passthrough (per-tier regression)", () => {
 		expect(output.stopReason).toBe("error");
 		expect(output.errorMessage).toContain("OpenAI API error (403)");
 		expect(output.errorMessage).toContain("blocked by gateway WAF");
-	});
-
-	it("bedrock (body-blind) surfaces the gateway body instead of Unknown: UnknownError", async () => {
-		bedrockMock.sendError = Object.assign(new Error("UnknownError"), {
-			name: "UnknownError",
-			$metadata: { httpStatusCode: 403 },
-			$response: { statusCode: 403, body: '{"message":"blocked by gateway WAF"}' },
-		});
-
-		const model = getModel("amazon-bedrock", "us.anthropic.claude-opus-4-8");
-		const output = await drainResult(streamSimpleBedrock(model, { messages: context.messages }, {}));
-
-		expect(output.stopReason).toBe("error");
-		expect(output.errorMessage).toContain("403");
-		expect(output.errorMessage).toContain("blocked by gateway WAF");
-		expect(output.errorMessage).not.toContain("Unknown: UnknownError");
-	});
-
-	it("bedrock preserves the SDK validation message when the response body is a stream", async () => {
-		bedrockMock.sendError = Object.assign(
-			new Error(
-				"Invocation of model ID anthropic.claude-opus-5 with on-demand throughput isn't supported. Retry with an inference profile.",
-			),
-			{
-				name: "ValidationException",
-				$metadata: { httpStatusCode: 400 },
-				$response: {
-					statusCode: 400,
-					body: { pipe: () => undefined, _readableState: { buffer: [], length: 0 } },
-				},
-			},
-		);
-
-		const model = getModel("amazon-bedrock", "global.anthropic.claude-opus-5");
-		const output = await drainResult(streamSimpleBedrock(model, { messages: context.messages }, {}));
-
-		expect(output.stopReason).toBe("error");
-		expect(output.errorMessage).toContain("on-demand throughput isn't supported");
-		expect(output.errorMessage).toContain("inference profile");
-		expect(output.errorMessage).not.toContain("_readableState");
 	});
 });
