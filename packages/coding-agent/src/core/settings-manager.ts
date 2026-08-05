@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";
-import { CONFIG_DIR_NAME, getAgentDir } from "../config.ts";
+import { CONFIG_DIR_NAME, getAgentDir, isEnterpriseBuild } from "../config.ts";
 import { normalizePath, resolvePath } from "../utils/paths.ts";
 import { DEFAULT_HTTP_IDLE_TIMEOUT_MS, parseHttpIdleTimeoutMs } from "./http-dispatcher.ts";
 
@@ -943,6 +943,7 @@ export class SettingsManager {
 	}
 
 	getEnableInstallTelemetry(): boolean {
+		if (isEnterpriseBuild()) return false;
 		return this.settings.enableInstallTelemetry ?? true;
 	}
 

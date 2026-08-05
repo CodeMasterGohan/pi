@@ -24,7 +24,7 @@ import { listModels } from "./cli/list-models.ts";
 import { createProjectTrustContext } from "./cli/project-trust.ts";
 import { selectSession } from "./cli/session-picker.ts";
 import { shouldRunFirstTimeSetup, showFirstTimeSetup, showStartupSelector } from "./cli/startup-ui.ts";
-import { ENV_SESSION_DIR, expandTildePath, getAgentDir, getPackageDir, VERSION } from "./config.ts";
+import { ENV_SESSION_DIR, expandTildePath, getAgentDir, getPackageDir, isEnterpriseBuild, VERSION } from "./config.ts";
 import { type CreateAgentSessionRuntimeFactory, createAgentSessionRuntime } from "./core/agent-session-runtime.ts";
 import {
 	type AgentSessionRuntimeDiagnostic,
@@ -104,6 +104,30 @@ function reportDiagnostics(diagnostics: readonly AgentSessionRuntimeDiagnostic[]
 function isTruthyEnvFlag(value: string | undefined): boolean {
 	if (!value) return false;
 	return value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes";
+}
+
+/**
+ * Enterprise (airgapped) builds default to offline mode so the shipped binary
+ * performs no startup network operations and no telemetry callbacks to pi.dev
+ * or provider endpoints. An operator may explicitly opt back into network
+ * startup by setting `PI_ALLOW_NETWORK=1`.
+ *
+ * This is extracted into its own exported function so the lockdown behavior can
+ * be unit-tested without invoking the full `main()` entry point (which calls
+ * `process.exit` for `--help` etc.). Returns the resolved offline mode so
+ * callers (`main()`) can pass it downstream.
+ */
+export function applyEnterpriseLockdown(args: string[]): boolean {
+	const enterpriseForcedOffline = isEnterpriseBuild() && !isTruthyEnvFlag(process.env.PI_ALLOW_NETWORK);
+	const offlineMode = enterpriseForcedOffline || args.includes("--offline") || isTruthyEnvFlag(process.env.PI_OFFLINE);
+	if (offlineMode) {
+		process.env.PI_OFFLINE = "1";
+		process.env.PI_SKIP_VERSION_CHECK = "1";
+		if (enterpriseForcedOffline) {
+			process.env.PI_TELEMETRY = "0";
+		}
+	}
+	return offlineMode;
 }
 
 function resolveAppMode(parsed: Args, stdinIsTTY: boolean, stdoutIsTTY: boolean): AppMode {
@@ -528,11 +552,8 @@ export interface MainOptions {
 export async function main(args: string[], options?: MainOptions) {
 	resetTimings();
 	const extensionFactories = [...builtInExtensions, ...(options?.extensionFactories ?? [])];
-	const offlineMode = args.includes("--offline") || isTruthyEnvFlag(process.env.PI_OFFLINE);
-	if (offlineMode) {
-		process.env.PI_OFFLINE = "1";
-		process.env.PI_SKIP_VERSION_CHECK = "1";
-	}
+
+	const offlineMode = applyEnterpriseLockdown(args);
 
 	if (process.platform === "win32") {
 		cleanupWindowsSelfUpdateQuarantine(getPackageDir());

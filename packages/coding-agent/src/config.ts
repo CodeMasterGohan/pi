@@ -6,6 +6,47 @@ import { spawnProcessSync } from "./utils/child-process.ts";
 import { normalizePath } from "./utils/paths.ts";
 
 // =============================================================================
+// Enterprise Build Flag
+// =============================================================================
+
+/**
+ * Whether this build is an Enterprise (airgapped/lockdown) build.
+ *
+ * The Enterprise build places a sentinel file named `enterprise` next to the
+ * package `package.json` (see `getPackageDir()`). At runtime,
+ * `isEnterpriseBuild()` checks for that file. This avoids any requirement for
+ * build-time constant replacement (tsgo has no `--define` flag) and works
+ * uniformly across the Node.js dist build, the Bun compiled binary, and tsx
+ * development runs.
+ *
+ * In an Enterprise build, `isEnterpriseBuild()` causes the binary to default
+ * to offline mode at startup: version checks, install telemetry, model catalog
+ * refreshes, and package update checks are all disabled unless an operator
+ * explicitly re-enables them via `PI_ALLOW_NETWORK=1`. This guarantees the
+ * shipped binary performs no runtime callbacks to pi.dev or provider
+ * endpoints without an explicit admin override.
+ */
+const ENTERPRISE_SENTINEL = "enterprise";
+
+let enterpriseBuildCache: boolean | undefined;
+
+/** True when the current binary was compiled as an Enterprise (lockdown) build. */
+export function isEnterpriseBuild(): boolean {
+	if (enterpriseBuildCache !== undefined) return enterpriseBuildCache;
+	try {
+		enterpriseBuildCache = existsSync(join(getPackageDir(), ENTERPRISE_SENTINEL));
+	} catch {
+		enterpriseBuildCache = false;
+	}
+	return enterpriseBuildCache;
+}
+
+// Allow tests to reset the cache after mutating the filesystem or env.
+export function _resetEnterpriseBuildCache(): void {
+	enterpriseBuildCache = undefined;
+}
+
+// =============================================================================
 // Package Detection
 // =============================================================================
 
