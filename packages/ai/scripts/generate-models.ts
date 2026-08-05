@@ -592,8 +592,6 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 
 	const isNonStandard =
 		isNvidia ||
-		provider === "cerebras" ||
-		baseUrl.includes("cerebras.ai") ||
 		provider === "xai" ||
 		baseUrl.includes("api.x.ai") ||
 		isTogether ||
@@ -1283,32 +1281,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 			}
 		}
 
-		// Process Cerebras models
-		if (data.cerebras?.models) {
-			for (const [modelId, model] of Object.entries(data.cerebras.models)) {
-				const m = model as ModelsDevModel;
-				if (m.tool_call !== true) continue;
 
-				models.push({
-					id: modelId,
-					name: m.name || modelId,
-					api: "openai-completions",
-					provider: "cerebras",
-					baseUrl: "https://api.cerebras.ai/v1",
-					reasoning: m.reasoning === true,
-					input: m.modalities?.input?.includes("image") ? ["text", "image"] : ["text"],
-					cost: {
-						input: m.cost?.input || 0,
-						output: m.cost?.output || 0,
-						cacheRead: m.cost?.cache_read || 0,
-						cacheWrite: m.cost?.cache_write || 0,
-					},
-					contextWindow: m.limit?.context || 4096,
-					maxTokens: m.limit?.output || 4096,
-				});
-				recordModelsDevReasoningOptions("cerebras", modelId, m);
-			}
-		}
 
 		// Process Cloudflare Workers AI models
 		if (data["cloudflare-workers-ai"]?.models) {

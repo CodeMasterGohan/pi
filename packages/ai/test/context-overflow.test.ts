@@ -292,30 +292,6 @@ describe("Context overflow error handling", () => {
 	});
 
 	// =============================================================================
-	// Cerebras
-	// Expected: 400/413 status code with no body
-	// =============================================================================
-
-	describe.skipIf(!process.env.CEREBRAS_API_KEY)("Cerebras", () => {
-		it("available model - should detect overflow via isContextOverflow", async () => {
-			const preferredCerebrasModelIds: string[] = ["gpt-oss-120b", "zai-glm-4.7", "llama3.1-8b"];
-			const cerebrasModels = getModels("cerebras");
-			const model =
-				cerebrasModels.find((candidate) => preferredCerebrasModelIds.includes(candidate.id)) ?? cerebrasModels[0];
-			if (!model) {
-				throw new Error("No Cerebras models available");
-			}
-
-			const result = await testContextOverflow(model, process.env.CEREBRAS_API_KEY!);
-			logResult(result);
-
-			expect(result.stopReason).toBe("error");
-			// Cerebras returns status code with no body (400, 413, or 429 for token rate limit)
-			expect(result.errorMessage).toMatch(/4(00|13|29).*\(no body\)/i);
-			expect(isContextOverflow(result.response, model.contextWindow)).toBe(true);
-		}, 120000);
-	});
-
 	// =============================================================================
 	// Hugging Face
 	// Uses OpenAI-compatible Inference Router

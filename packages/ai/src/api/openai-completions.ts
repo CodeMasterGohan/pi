@@ -1411,8 +1411,6 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 
 	const isNonStandard =
 		isNvidia ||
-		provider === "cerebras" ||
-		baseUrl.includes("cerebras.ai") ||
 		provider === "xai" ||
 		baseUrl.includes("api.x.ai") ||
 		isTogether ||

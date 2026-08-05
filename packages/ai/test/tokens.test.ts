@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getModel, getModels, stream } from "../src/compat.ts";
+import { getModel, stream } from "../src/compat.ts";
 import type { Api, Context, Model, StreamOptions } from "../src/types.ts";
 
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
@@ -143,20 +143,6 @@ describe("Token Statistics on Abort", () => {
 		const llm = getModel("groq", "openai/gpt-oss-20b");
 
 		it("should include token stats when aborted mid-stream", { retry: 3, timeout: 30000 }, async () => {
-			await testTokensOnAbort(llm);
-		});
-	});
-
-	describe.skipIf(!process.env.CEREBRAS_API_KEY)("Cerebras Provider", () => {
-		const preferredCerebrasModelIds: string[] = ["gpt-oss-120b", "zai-glm-4.7", "llama3.1-8b"];
-		const cerebrasModels = getModels("cerebras");
-		const llm = cerebrasModels.find((model) => preferredCerebrasModelIds.includes(model.id)) ?? cerebrasModels[0];
-
-		it("should include token stats when aborted mid-stream", { retry: 3, timeout: 30000 }, async () => {
-			if (!llm) {
-				throw new Error("No Cerebras models available");
-			}
-
 			await testTokensOnAbort(llm);
 		});
 	});

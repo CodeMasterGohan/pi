@@ -45,7 +45,6 @@ export type KnownProvider =
 	| "github-copilot"
 	| "xai"
 	| "groq"
-	| "cerebras"
 	| "openrouter"
 	| "vercel-ai-gateway"
 	| "zai"
