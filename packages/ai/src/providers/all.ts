@@ -29,7 +29,6 @@ import { openrouterImagesProvider } from "./openrouter-images.ts";
 import { qwenTokenPlanProvider } from "./qwen-token-plan.ts";
 import { qwenTokenPlanCnProvider } from "./qwen-token-plan-cn.ts";
 import { radiusProvider } from "./radius.ts";
-import { togetherProvider } from "./together.ts";
 import { vercelAIGatewayProvider } from "./vercel-ai-gateway.ts";
 import { xaiProvider } from "./xai.ts";
 import { xiaomiProvider } from "./xiaomi.ts";
@@ -107,7 +106,6 @@ export function builtinProviders(): Provider[] {
 		qwenTokenPlanProvider(),
 		qwenTokenPlanCnProvider(),
 		radiusProvider(),
-		togetherProvider(),
 		vercelAIGatewayProvider(),
 		xaiProvider(),
 		xiaomiProvider(),

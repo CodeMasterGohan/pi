@@ -151,56 +151,7 @@ const KIMI_STATIC_HEADERS = {
 	"User-Agent": "KimiCLI/1.5",
 } as const;
 
-const TOGETHER_BASE_URL = "https://api.together.ai/v1";
-const TOGETHER_BASE_COMPAT: OpenAICompletionsCompat = {
-	supportsStore: false,
-	supportsDeveloperRole: false,
-	supportsReasoningEffort: false,
-	maxTokensField: "max_tokens",
-	supportsStrictMode: false,
-	supportsLongCacheRetention: false,
-};
-const TOGETHER_TOGGLE_REASONING_COMPAT: OpenAICompletionsCompat = {
-	...TOGETHER_BASE_COMPAT,
-	thinkingFormat: "together",
-};
-const TOGETHER_REASONING_EFFORT_COMPAT: OpenAICompletionsCompat = {
-	...TOGETHER_BASE_COMPAT,
-	supportsReasoningEffort: true,
-	thinkingFormat: "openai",
-};
-const TOGETHER_TOGGLE_REASONING_EFFORT_COMPAT: OpenAICompletionsCompat = {
-	...TOGETHER_TOGGLE_REASONING_COMPAT,
-	supportsReasoningEffort: true,
-};
-const TOGETHER_REASONING_ONLY_MODELS = new Set([
-	"deepseek-ai/DeepSeek-R1",
-	"MiniMaxAI/MiniMax-M2.7",
-]);
-const TOGETHER_REASONING_EFFORT_MODELS = new Set(["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
-const TOGETHER_TOGGLE_REASONING_EFFORT_MODELS = new Set(["deepseek-ai/DeepSeek-V4-Pro"]);
-const TOGETHER_FIXED_REASONING_LEVEL_MAP = {
-	off: null,
-	minimal: null,
-	low: null,
-	medium: null,
-} as const;
-const TOGETHER_REASONING_EFFORT_LEVEL_MAP = {
-	off: null,
-	minimal: null,
-} as const;
-const TOGETHER_DEEPSEEK_V4_THINKING_LEVEL_MAP = {
-	minimal: null,
-	low: null,
-	medium: null,
-	high: "high",
-	xhigh: null,
-} as const;
-const TOGETHER_TOGGLE_REASONING_LEVEL_MAP = {
-	minimal: null,
-	low: null,
-	medium: null,
-} as const;
+
 
 const AI_GATEWAY_MODELS_URL = "https://ai-gateway.vercel.sh/v1";
 const AI_GATEWAY_BASE_URL = "https://ai-gateway.vercel.sh";
@@ -465,24 +416,7 @@ function applyModelsDevReasoningOptionMetadata(model: Model<Api>): void {
 	if (thinkingLevelMap) mergeThinkingLevelMap(model, thinkingLevelMap);
 }
 
-function getTogetherCompat(modelId: string, reasoning: boolean): OpenAICompletionsCompat {
-	if (!reasoning) return TOGETHER_BASE_COMPAT;
-	if (TOGETHER_REASONING_EFFORT_MODELS.has(modelId)) return TOGETHER_REASONING_EFFORT_COMPAT;
-	if (TOGETHER_TOGGLE_REASONING_EFFORT_MODELS.has(modelId)) return TOGETHER_TOGGLE_REASONING_EFFORT_COMPAT;
-	if (TOGETHER_REASONING_ONLY_MODELS.has(modelId)) return TOGETHER_BASE_COMPAT;
-	return TOGETHER_TOGGLE_REASONING_COMPAT;
-}
 
-function getTogetherThinkingLevelMap(
-	modelId: string,
-	reasoning: boolean,
-): NonNullable<Model<any>["thinkingLevelMap"]> | undefined {
-	if (!reasoning) return undefined;
-	if (TOGETHER_REASONING_EFFORT_MODELS.has(modelId)) return { ...TOGETHER_REASONING_EFFORT_LEVEL_MAP };
-	if (TOGETHER_TOGGLE_REASONING_EFFORT_MODELS.has(modelId)) return { ...TOGETHER_DEEPSEEK_V4_THINKING_LEVEL_MAP };
-	if (TOGETHER_REASONING_ONLY_MODELS.has(modelId)) return { ...TOGETHER_FIXED_REASONING_LEVEL_MAP };
-	return { ...TOGETHER_TOGGLE_REASONING_LEVEL_MAP };
-}
 
 function supportsOpenAiXhigh(modelId: string): boolean {
 	return (
@@ -581,20 +515,16 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 		provider === "zai-coding-cn" ||
 		baseUrl.includes("api.z.ai") ||
 		baseUrl.includes("open.bigmodel.cn");
-	const isTogether =
-		provider === "together" || baseUrl.includes("api.together.ai") || baseUrl.includes("api.together.xyz");
 	const isMoonshot = provider === "moonshotai" || provider === "moonshotai-cn" || baseUrl.includes("api.moonshot.");
 	const isOpenRouter = provider === "openrouter" || baseUrl.includes("openrouter.ai");
 	const isCloudflareWorkersAI = provider === "cloudflare-workers-ai" || baseUrl.includes("api.cloudflare.com");
 	const isCloudflareAiGateway = provider === "cloudflare-ai-gateway" || baseUrl.includes("gateway.ai.cloudflare.com");
 	const isNvidia = provider === "nvidia" || baseUrl.includes("integrate.api.nvidia.com");
-	const isTogetherReasoningOnly = isTogether && TOGETHER_REASONING_ONLY_MODELS.has(model.id);
 
 	const isNonStandard =
 		isNvidia ||
 		provider === "xai" ||
 		baseUrl.includes("api.x.ai") ||
-		isTogether ||
 		baseUrl.includes("chutes.ai") ||
 		baseUrl.includes("deepseek.com") ||
 		isZai ||
@@ -605,7 +535,7 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 		isCloudflareAiGateway;
 
 	const useMaxTokens =
-		baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isTogether || isNvidia || isZai;
+		baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isNvidia || isZai;
 
 	const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
 	const isDeepSeek = provider === "deepseek" || baseUrl.includes("deepseek.com");
@@ -618,7 +548,7 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 		supportsStore: !isNonStandard,
 		supportsDeveloperRole: isOpenRouterDeveloperRoleModel || (!isNonStandard && !isOpenRouter),
 		supportsReasoningEffort:
-			!isGrok && !isZai && !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia,
+			!isGrok && !isZai && !isMoonshot && !isCloudflareAiGateway && !isNvidia,
 		supportsUsageInStreaming: true,
 		supportsFinishReason: true,
 		maxTokensField: useMaxTokens ? "max_tokens" : "max_completion_tokens",
@@ -630,22 +560,19 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 			? "deepseek"
 			: isZai
 				? "zai"
-				: isTogether && !isTogetherReasoningOnly
-					? "together"
-					: isOpenRouter
-						? "openrouter"
-						: "openai",
+				: isOpenRouter
+					? "openrouter"
+					: "openai",
 		openRouterRouting: {},
 		vercelGatewayRouting: {},
 		chatTemplateKwargs: {},
 		chatTemplateArgs: {},
 		zaiToolStream: false,
-		supportsStrictMode: !isMoonshot && !isTogether && !isCloudflareAiGateway && !isNvidia,
+		supportsStrictMode: !isMoonshot && !isCloudflareAiGateway && !isNvidia,
 		supportsOpenAIGrammarTools: false,
 		...(cacheControlFormat ? { cacheControlFormat } : {}),
 		sendSessionAffinityHeaders: false,
 		supportsLongCacheRetention: !(
-			isTogether ||
 			isCloudflareWorkersAI ||
 			isCloudflareAiGateway ||
 			isNvidia
@@ -1504,38 +1431,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 			}
 		}
 
-		// Process Together AI models
-		const togetherProvider = data.together ?? data.togetherai ?? data["together-ai"];
-		if (togetherProvider?.models) {
-			for (const [modelId, model] of Object.entries(togetherProvider.models)) {
-				const m = model as ModelsDevModel;
-				if (m.tool_call !== true) continue;
-				if (m.status === "deprecated") continue;
 
-				const reasoning = m.reasoning === true;
-				const thinkingLevelMap = getTogetherThinkingLevelMap(modelId, reasoning);
-				models.push({
-					id: modelId,
-					name: m.name || modelId,
-					api: "openai-completions",
-					provider: "together",
-					baseUrl: TOGETHER_BASE_URL,
-					reasoning,
-					...(thinkingLevelMap ? { thinkingLevelMap } : {}),
-					input: m.modalities?.input?.includes("image") ? ["text", "image"] : ["text"],
-					cost: {
-						input: m.cost?.input || 0,
-						output: m.cost?.output || 0,
-						cacheRead: m.cost?.cache_read || 0,
-						cacheWrite: m.cost?.cache_write || 0,
-					},
-					compat: getTogetherCompat(modelId, reasoning),
-					contextWindow: m.limit?.context || 4096,
-					maxTokens: m.limit?.output || 4096,
-				});
-				recordModelsDevReasoningOptions("together", modelId, m);
-			}
-		}
 
 
 

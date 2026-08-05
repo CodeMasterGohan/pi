@@ -97,7 +97,6 @@ function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 		moonshotai: "MOONSHOT_API_KEY",
 		"moonshotai-cn": "MOONSHOT_API_KEY",
 		huggingface: "HF_TOKEN",
-		together: "TOGETHER_API_KEY",
 		opencode: "OPENCODE_API_KEY",
 		"opencode-go": "OPENCODE_API_KEY",
 		"kimi-coding": "KIMI_API_KEY",
