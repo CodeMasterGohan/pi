@@ -3,7 +3,6 @@ import { MODELS } from "../models.generated.ts";
 import { type CreateModelsOptions, createModels, type MutableModels, type Provider } from "../models.ts";
 import type { Api, Model } from "../types.ts";
 import modelDataManifest from "./data/.manifest.json" with { type: "json" };
-import { deepseekProvider } from "./deepseek.ts";
 import { githubCopilotProvider } from "./github-copilot.ts";
 import { googleProvider } from "./google.ts";
 import { googleVertexProvider } from "./google-vertex.ts";
@@ -76,7 +75,6 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 /** All built-in providers, freshly constructed. */
 export function builtinProviders(): Provider[] {
 	return [
-		deepseekProvider(),
 		githubCopilotProvider(),
 		googleProvider(),
 		googleVertexProvider(),

@@ -36,7 +36,6 @@ export type KnownProvider =
 	| "openai-codex"
 	| "radius"
 	| "nvidia"
-	| "deepseek"
 	| "github-copilot"
 	| "xai"
 	| "openrouter"

@@ -1872,45 +1872,7 @@ async function generateModels() {
 		requiresReasoningContentOnAssistantMessages: true,
 		thinkingFormat: "deepseek",
 	};
-	const deepseekV4Models: Model<"openai-completions">[] = [
-		{
-			id: "deepseek-v4-flash",
-			name: "DeepSeek V4 Flash",
-			api: "openai-completions",
-			baseUrl: "https://api.deepseek.com",
-			provider: "deepseek",
-			reasoning: true,
-			input: ["text"],
-			cost: {
-				input: 0.14,
-				output: 0.28,
-				cacheRead: 0.0028,
-				cacheWrite: 0,
-			},
-			contextWindow: 1000000,
-			maxTokens: 384000,
-			compat: deepseekCompat,
-		},
-		{
-			id: "deepseek-v4-pro",
-			name: "DeepSeek V4 Pro",
-			api: "openai-completions",
-			baseUrl: "https://api.deepseek.com",
-			provider: "deepseek",
-			reasoning: true,
-			input: ["text"],
-			cost: {
-				input: 0.435,
-				output: 0.87,
-				cacheRead: 0.003625,
-				cacheWrite: 0,
-			},
-			contextWindow: 1000000,
-			maxTokens: 384000,
-			compat: deepseekCompat,
-		},
-	];
-	allModels.push(...deepseekV4Models);
+
 
 	const antLingCompat: OpenAICompletionsCompat = {
 		supportsStore: false,

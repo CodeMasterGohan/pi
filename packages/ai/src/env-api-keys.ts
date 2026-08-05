@@ -75,7 +75,6 @@ function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 		"qwen-token-plan-cn": "QWEN_TOKEN_PLAN_CN_API_KEY",
 		openai: "OPENAI_API_KEY",
 		nvidia: "NVIDIA_API_KEY",
-		deepseek: "DEEPSEEK_API_KEY",
 		google: "GEMINI_API_KEY",
 		"google-vertex": "GOOGLE_CLOUD_API_KEY",
 		xai: "XAI_API_KEY",
