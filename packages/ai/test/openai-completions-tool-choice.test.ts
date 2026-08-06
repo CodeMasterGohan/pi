@@ -1149,7 +1149,7 @@ describe("openai-completions tool_choice", () => {
 	});
 
 	it("omits disabled thinking for Moonshot Kimi K2.7 Code models", async () => {
-		const model = getModel("moonshotai", "kimi-k2.7-code")!;
+		const model = getModel("openrouter", "moonshotai/kimi-k2.5")!;
 		let payload: unknown;
 
 		await streamSimple(
@@ -1171,7 +1171,7 @@ describe("openai-completions tool_choice", () => {
 	});
 
 	it("keeps disabled thinking for Moonshot Kimi K2.6 when thinking is off", async () => {
-		const model = getModel("moonshotai", "kimi-k2.6")!;
+		const model = getModel("openrouter", "moonshotai/kimi-k2.5")!;
 		let payload: unknown;
 
 		await streamSimple(

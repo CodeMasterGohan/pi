@@ -23,7 +23,6 @@ export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openrouter: "moonshotai/kimi-k2.6",
 	"vercel-ai-gateway": "zai/glm-5.1",
 	zai: "glm-5.1",
-	moonshotai: "kimi-k2.6",
 	xiaomi: "mimo-v2.5-pro",
 };
 

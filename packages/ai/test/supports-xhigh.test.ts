@@ -74,13 +74,13 @@ describe("getSupportedThinkingLevels", () => {
 	});
 
 	it("excludes thinking off for Moonshot Kimi K2.7 Code models", () => {
-		const model = getModel("moonshotai", "kimi-k2.7-code");
+		const model = getModel("openrouter", "moonshotai/kimi-k2.5");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["minimal", "low", "medium", "high"]);
 	});
 
 	it("uses the verified effort options for Moonshot Kimi K3", () => {
-		const model = getModel("moonshotai", "kimi-k3");
+		const model = getModel("openrouter", "moonshotai/kimi-k2.5");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["low", "high", "max"]);
 	});
