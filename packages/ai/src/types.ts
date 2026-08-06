@@ -36,7 +36,6 @@ export type KnownProvider =
 	| "mistral"
 	| "minimax"
 	| "moonshotai"
-	| "huggingface"
 	| "xiaomi";
 export type ProviderId = KnownProvider | string;
 
