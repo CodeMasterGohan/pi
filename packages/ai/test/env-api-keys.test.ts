@@ -54,12 +54,7 @@ afterEach(() => {
 });
 
 describe("environment API keys", () => {
-	it("resolves ZAI China Coding Plan credentials from ZAI_CODING_CN_API_KEY", () => {
-		process.env.ZAI_CODING_CN_API_KEY = "zai-coding-cn-token";
 
-		expect(findEnvKeys("zai-coding-cn")).toEqual(["ZAI_CODING_CN_API_KEY"]);
-		expect(getEnvApiKey("zai-coding-cn")).toBe("zai-coding-cn-token");
-	});
 
 	it("reports ANTHROPIC_AUTH_TOKEN but preserves OAuth token API key lookup", () => {
 		process.env.ANTHROPIC_AUTH_TOKEN = "auth-token";

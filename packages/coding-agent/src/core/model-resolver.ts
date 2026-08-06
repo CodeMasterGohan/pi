@@ -25,7 +25,6 @@ export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openrouter: "moonshotai/kimi-k2.6",
 	"vercel-ai-gateway": "zai/glm-5.1",
 	zai: "glm-5.1",
-	"zai-coding-cn": "glm-5.1",
 	mistral: "devstral-medium-latest",
 	minimax: "MiniMax-M2.7",
 	"minimax-cn": "MiniMax-M2.7",

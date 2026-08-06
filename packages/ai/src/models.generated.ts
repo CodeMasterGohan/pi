@@ -15,7 +15,6 @@ import { OPENROUTER_MODELS } from "./providers/openrouter.models.ts";
 import { VERCEL_AI_GATEWAY_MODELS } from "./providers/vercel-ai-gateway.models.ts";
 import { XIAOMI_MODELS } from "./providers/xiaomi.models.ts";
 import { ZAI_MODELS } from "./providers/zai.models.ts";
-import { ZAI_CODING_CN_MODELS } from "./providers/zai-coding-cn.models.ts";
 
 export const MODELS: {
 		readonly "google": typeof GOOGLE_MODELS;
@@ -32,7 +31,6 @@ export const MODELS: {
 	readonly "vercel-ai-gateway": typeof VERCEL_AI_GATEWAY_MODELS;
 		readonly "xiaomi": typeof XIAOMI_MODELS;
 	readonly "zai": typeof ZAI_MODELS;
-	readonly "zai-coding-cn": typeof ZAI_CODING_CN_MODELS;
 } = {
 		"google": GOOGLE_MODELS,
 	"google-vertex": GOOGLE_VERTEX_MODELS,
@@ -48,5 +46,4 @@ export const MODELS: {
 	"vercel-ai-gateway": VERCEL_AI_GATEWAY_MODELS,
 		"xiaomi": XIAOMI_MODELS,
 	"zai": ZAI_MODELS,
-	"zai-coding-cn": ZAI_CODING_CN_MODELS,
 };

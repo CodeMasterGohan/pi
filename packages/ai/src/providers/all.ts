@@ -18,7 +18,6 @@ import { openrouterImagesProvider } from "./openrouter-images.ts";
 import { vercelAIGatewayProvider } from "./vercel-ai-gateway.ts";
 import { xiaomiProvider } from "./xiaomi.ts";
 import { zaiProvider } from "./zai.ts";
-import { zaiCodingCnProvider } from "./zai-coding-cn.ts";
 
 /** Providers present in the generated catalog. `KnownProvider` additionally
  * catalog entry. */
@@ -74,7 +73,6 @@ export function builtinProviders(): Provider[] {
 		vercelAIGatewayProvider(),
 		xiaomiProvider(),
 		zaiProvider(),
-		zaiCodingCnProvider(),
 	];
 }
 
