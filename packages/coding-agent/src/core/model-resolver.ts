@@ -20,7 +20,6 @@ import type { ModelRuntime } from "./model-runtime.ts";
 export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openai: "gpt-5.5",
 	openrouter: "moonshotai/kimi-k2.6",
-	"vercel-ai-gateway": "zai/glm-5.1",
 	zai: "glm-5.1",
 	xiaomi: "mimo-v2.5-pro",
 };

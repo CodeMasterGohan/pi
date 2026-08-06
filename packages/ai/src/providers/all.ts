@@ -6,7 +6,6 @@ import modelDataManifest from "./data/.manifest.json" with { type: "json" };
 import { openaiProvider } from "./openai.ts";
 import { openrouterProvider } from "./openrouter.ts";
 import { openrouterImagesProvider } from "./openrouter-images.ts";
-import { vercelAIGatewayProvider } from "./vercel-ai-gateway.ts";
 import { xiaomiProvider } from "./xiaomi.ts";
 import { zaiProvider } from "./zai.ts";
 
@@ -49,7 +48,7 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 
 /** All built-in providers, freshly constructed. */
 export function builtinProviders(): Provider[] {
-	return [openaiProvider(), openrouterProvider(), vercelAIGatewayProvider(), xiaomiProvider(), zaiProvider()];
+	return [openaiProvider(), openrouterProvider(), xiaomiProvider(), zaiProvider()];
 }
 
 /** A `Models` collection with every built-in provider registered. */

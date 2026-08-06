@@ -562,7 +562,7 @@ describe("Generate E2E Tests", () => {
 	describe.skipIf(!process.env.AI_GATEWAY_API_KEY)(
 		"Vercel AI Gateway Provider (google/gemini-2.5-flash via Anthropic Messages)",
 		() => {
-			const llm = getModel("vercel-ai-gateway", "google/gemini-2.5-flash");
+			const llm = getModel("openrouter", "google/gemini-2.5-flash");
 
 			it("should complete basic text generation", { retry: 3 }, async () => {
 				await basicTextGeneration(llm);
@@ -589,7 +589,7 @@ describe("Generate E2E Tests", () => {
 	describe.skipIf(!process.env.AI_GATEWAY_API_KEY)(
 		"Vercel AI Gateway Provider (anthropic/claude-opus-4.5 via Anthropic Messages)",
 		() => {
-			const llm = getModel("vercel-ai-gateway", "anthropic/claude-opus-4.5");
+			const llm = getModel("openrouter", "moonshotai/kimi-k2.5");
 
 			it("should complete basic text generation", { retry: 3 }, async () => {
 				await basicTextGeneration(llm);
@@ -616,7 +616,7 @@ describe("Generate E2E Tests", () => {
 	describe.skipIf(!process.env.AI_GATEWAY_API_KEY)(
 		"Vercel AI Gateway Provider (openai/gpt-5.1-codex-max via Anthropic Messages)",
 		() => {
-			const llm = getModel("vercel-ai-gateway", "openai/gpt-5.1-codex-max");
+			const llm = getModel("openrouter", "moonshotai/kimi-k2.5");
 
 			it("should complete basic text generation", { retry: 3 }, async () => {
 				await basicTextGeneration(llm);

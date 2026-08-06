@@ -697,10 +697,6 @@ describe("default model selection", () => {
 		expect(defaultModelPerProvider.zai).toBe("glm-5.1");
 	});
 
-	test("ai-gateway default tracks current model", () => {
-		expect(defaultModelPerProvider["vercel-ai-gateway"]).toBe("zai/glm-5.1");
-	});
-
 	test("findInitialModel accepts explicit provider custom model ids", async () => {
 		const registry = {
 			getModels: () => allModels,

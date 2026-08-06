@@ -3,20 +3,17 @@
 
 import { OPENAI_MODELS } from "./providers/openai.models.ts";
 import { OPENROUTER_MODELS } from "./providers/openrouter.models.ts";
-import { VERCEL_AI_GATEWAY_MODELS } from "./providers/vercel-ai-gateway.models.ts";
 import { XIAOMI_MODELS } from "./providers/xiaomi.models.ts";
 import { ZAI_MODELS } from "./providers/zai.models.ts";
 
 export const MODELS: {
 	readonly "openai": typeof OPENAI_MODELS;
 	readonly "openrouter": typeof OPENROUTER_MODELS;
-	readonly "vercel-ai-gateway": typeof VERCEL_AI_GATEWAY_MODELS;
 		readonly "xiaomi": typeof XIAOMI_MODELS;
 	readonly "zai": typeof ZAI_MODELS;
 } = {
 	"openai": OPENAI_MODELS,
 	"openrouter": OPENROUTER_MODELS,
-	"vercel-ai-gateway": VERCEL_AI_GATEWAY_MODELS,
 		"xiaomi": XIAOMI_MODELS,
 	"zai": ZAI_MODELS,
 };

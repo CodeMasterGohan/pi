@@ -27,7 +27,7 @@ export type KnownImagesApi = "openrouter-images";
 
 export type ImagesApi = KnownImagesApi | (string & {});
 
-export type KnownProvider = "openai" | "openrouter" | "vercel-ai-gateway" | "zai" | "xiaomi";
+export type KnownProvider = "openai" | "openrouter" | "zai" | "xiaomi";
 export type ProviderId = KnownProvider | string;
 
 export type KnownImagesProvider = "openrouter";
