@@ -47,7 +47,6 @@ export type KnownProvider =
 	| "opencode-go"
 	| "xiaomi"
 	| "xiaomi-token-plan-cn"
-	| "xiaomi-token-plan-ams"
 	| "xiaomi-token-plan-sgp";
 export type ProviderId = KnownProvider | string;
 

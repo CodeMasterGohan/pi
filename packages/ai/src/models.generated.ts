@@ -14,7 +14,6 @@ import { OPENAI_MODELS } from "./providers/openai.models.ts";
 import { OPENROUTER_MODELS } from "./providers/openrouter.models.ts";
 import { VERCEL_AI_GATEWAY_MODELS } from "./providers/vercel-ai-gateway.models.ts";
 import { XIAOMI_MODELS } from "./providers/xiaomi.models.ts";
-import { XIAOMI_TOKEN_PLAN_AMS_MODELS } from "./providers/xiaomi-token-plan-ams.models.ts";
 import { XIAOMI_TOKEN_PLAN_CN_MODELS } from "./providers/xiaomi-token-plan-cn.models.ts";
 import { XIAOMI_TOKEN_PLAN_SGP_MODELS } from "./providers/xiaomi-token-plan-sgp.models.ts";
 import { ZAI_MODELS } from "./providers/zai.models.ts";
@@ -34,7 +33,6 @@ export const MODELS: {
 	readonly "openrouter": typeof OPENROUTER_MODELS;
 	readonly "vercel-ai-gateway": typeof VERCEL_AI_GATEWAY_MODELS;
 		readonly "xiaomi": typeof XIAOMI_MODELS;
-	readonly "xiaomi-token-plan-ams": typeof XIAOMI_TOKEN_PLAN_AMS_MODELS;
 	readonly "xiaomi-token-plan-cn": typeof XIAOMI_TOKEN_PLAN_CN_MODELS;
 	readonly "xiaomi-token-plan-sgp": typeof XIAOMI_TOKEN_PLAN_SGP_MODELS;
 	readonly "zai": typeof ZAI_MODELS;
@@ -53,7 +51,6 @@ export const MODELS: {
 	"openrouter": OPENROUTER_MODELS,
 	"vercel-ai-gateway": VERCEL_AI_GATEWAY_MODELS,
 		"xiaomi": XIAOMI_MODELS,
-	"xiaomi-token-plan-ams": XIAOMI_TOKEN_PLAN_AMS_MODELS,
 	"xiaomi-token-plan-cn": XIAOMI_TOKEN_PLAN_CN_MODELS,
 	"xiaomi-token-plan-sgp": XIAOMI_TOKEN_PLAN_SGP_MODELS,
 	"zai": ZAI_MODELS,
