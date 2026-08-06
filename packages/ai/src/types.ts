@@ -46,7 +46,6 @@ export type KnownProvider =
 	| "huggingface"
 	| "opencode-go"
 	| "xiaomi"
-	| "xiaomi-token-plan-cn"
 	| "xiaomi-token-plan-sgp";
 export type ProviderId = KnownProvider | string;
 
