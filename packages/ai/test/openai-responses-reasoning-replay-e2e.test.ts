@@ -1,7 +1,21 @@
 import { Type } from "typebox";
 import { describe, expect, it } from "vitest";
 import { complete, getEnvApiKey, getModel } from "../src/compat.ts";
-import type { AssistantMessage, Context, Message, Tool, ToolCall } from "../src/types.ts";
+import type { AssistantMessage, Context, Message, Model, Tool, ToolCall } from "../src/types.ts";
+
+function toOpenAIResponsesModel(model: Model<"openai-completions">): Model<"openai-responses"> {
+	const baseCompat = model.compat as Record<string, unknown> | undefined;
+	const { sessionAffinityFormat: _sessionAffinityFormat, ...restCompat } = baseCompat ?? {};
+	return {
+		...model,
+		api: "openai-responses",
+		provider: "openai",
+		baseUrl: "https://api.openai.com/v1",
+		reasoning: model.reasoning,
+		thinkingLevelMap: model.thinkingLevelMap,
+		compat: { ...restCompat, sendSessionAffinityHeaders: false } as unknown as Model<"openai-responses">["compat"],
+	} as unknown as Model<"openai-responses">;
+}
 
 const testToolSchema = Type.Object({
 	value: Type.Number({ description: "A number to double" }),
@@ -17,9 +31,9 @@ describe.skipIf(!process.env.OPENAI_API_KEY || !process.env.ANTHROPIC_API_KEY)(
 	"OpenAI Responses reasoning replay e2e",
 	() => {
 		it("skips reasoning-only history after an aborted turn", { retry: 2 }, async () => {
-			const model = getModel("openai", "gpt-5-mini");
+			const model = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5-mini")!);
 
-			const apiKey = getEnvApiKey("openai");
+			const apiKey = getEnvApiKey("openrouter");
 			if (!apiKey) {
 				throw new Error("Missing OPENAI_API_KEY");
 			}
@@ -89,10 +103,10 @@ describe.skipIf(!process.env.OPENAI_API_KEY || !process.env.ANTHROPIC_API_KEY)(
 			// 5. Without fix: OpenAI returns 400 "function_call without required reasoning item"
 			// 6. With fix: tool calls/results converted to text, conversation continues
 
-			const modelA = getModel("openai", "gpt-5-mini");
-			const modelB = getModel("openai", "gpt-5.5");
+			const modelA = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5-mini")!);
+			const modelB = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.5")!);
 
-			const apiKey = getEnvApiKey("openai");
+			const apiKey = getEnvApiKey("openrouter");
 			if (!apiKey) {
 				throw new Error("Missing OPENAI_API_KEY");
 			}
@@ -189,10 +203,10 @@ describe.skipIf(!process.env.OPENAI_API_KEY || !process.env.ANTHROPIC_API_KEY)(
 			// 5. Should work because foreign IDs have no pairing expectation
 
 			const anthropicModel = getModel("openrouter", "anthropic/claude-sonnet-4.5");
-			const codexModel = getModel("openai", "gpt-5.5");
+			const codexModel = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.5")!);
 
 			const anthropicApiKey = getEnvApiKey("anthropic");
-			const openaiApiKey = getEnvApiKey("openai");
+			const openaiApiKey = getEnvApiKey("openrouter");
 			if (!anthropicApiKey || !openaiApiKey) {
 				throw new Error("Missing API keys");
 			}

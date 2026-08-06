@@ -1,16 +1,9 @@
 import type { KnownProvider, ProviderEnv } from "./types.ts";
 import { getProviderEnvValue } from "./utils/provider-env.ts";
 
-export const ANTHROPIC_AUTH_TOKEN_ENV = "ANTHROPIC_AUTH_TOKEN";
-export const ANTHROPIC_OAUTH_TOKEN_ENV = "ANTHROPIC_OAUTH_TOKEN";
-export const ANTHROPIC_API_KEY_ENV = "ANTHROPIC_API_KEY";
-
 function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 	const envMap: Record<string, string> = {
-		openai: "OPENAI_API_KEY",
 		openrouter: "OPENROUTER_API_KEY",
-		zai: "ZAI_API_KEY",
-		xiaomi: "XIAOMI_API_KEY",
 	};
 
 	const envVar = envMap[provider];
@@ -35,17 +28,14 @@ export function findEnvKeys(provider: string, env?: ProviderEnv): string[] | und
 }
 
 /**
- * Get API key for provider from known environment variables, e.g. OPENAI_API_KEY.
- *
- * Will not return API keys for providers that require OAuth tokens.
+ * Get API key for provider from known environment variables, e.g. OPENROUTER_API_KEY.
  */
 export function getEnvApiKey(provider: KnownProvider, env?: ProviderEnv): string | undefined;
 export function getEnvApiKey(provider: string, env?: ProviderEnv): string | undefined;
 export function getEnvApiKey(provider: string, env?: ProviderEnv): string | undefined {
 	const envKeys = findEnvKeys(provider, env);
 	if (envKeys?.[0]) {
-		const apiKeyEnv = provider === "anthropic" ? envKeys.find((key) => key !== ANTHROPIC_AUTH_TOKEN_ENV) : envKeys[0];
-		if (apiKeyEnv) return getProviderEnvValue(apiKeyEnv, env);
+		return getProviderEnvValue(envKeys[0], env);
 	}
 
 	return undefined;

@@ -27,7 +27,7 @@ const mockModels: Model<"anthropic-messages">[] = [
 		id: "gpt-4o",
 		name: "GPT-4o",
 		api: "anthropic-messages", // Using same type for simplicity
-		provider: "openai",
+		provider: "openrouter",
 		baseUrl: "https://api.openai.com",
 		reasoning: false,
 		input: ["text", "image"],
@@ -690,11 +690,7 @@ describe("resolveCliModel", () => {
 
 describe("default model selection", () => {
 	test("openai defaults track current models", () => {
-		expect(defaultModelPerProvider.openai).toBe("gpt-5.5");
-	});
-
-	test("zai default tracks current models", () => {
-		expect(defaultModelPerProvider.zai).toBe("glm-5.1");
+		expect(defaultModelPerProvider.openrouter).toBe("moonshotai/kimi-k2.6");
 	});
 
 	test("findInitialModel accepts explicit provider custom model ids", async () => {

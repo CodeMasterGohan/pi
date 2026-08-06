@@ -81,10 +81,11 @@ describe("openai-completions prompt caching", () => {
 	});
 
 	function createModel(overrides: Partial<Model<"openai-completions">> = {}): Model<"openai-completions"> {
-		const { compat: _compat, ...baseModel } = getModel("openai", "gpt-4o-mini");
+		const { compat: _compat, ...baseModel } = getModel("openrouter", "openai/gpt-4o-mini");
 		return {
 			...(baseModel as Omit<Model<"openai-completions">, "api">),
 			api: "openai-completions",
+			baseUrl: "https://api.openai.com/v1",
 			...overrides,
 		};
 	}
@@ -162,7 +163,7 @@ describe("openai-completions prompt caching", () => {
 	it("sends known session-affinity headers when compat.sendSessionAffinityHeaders is enabled", async () => {
 		const model = createModel({
 			baseUrl: "https://proxy.example.com/v1",
-			compat: { sendSessionAffinityHeaders: true },
+			compat: { sendSessionAffinityHeaders: true, sessionAffinityFormat: "openai" },
 		});
 		const { headers } = await captureRequest({ sessionId: "session-affinity" }, model);
 
@@ -231,7 +232,7 @@ describe("openai-completions prompt caching", () => {
 	it("omits session-affinity headers when cacheRetention is none", async () => {
 		const model = createModel({
 			baseUrl: "https://proxy.example.com/v1",
-			compat: { sendSessionAffinityHeaders: true },
+			compat: { sendSessionAffinityHeaders: true, sessionAffinityFormat: "openai" },
 		});
 		const { headers } = await captureRequest({ cacheRetention: "none", sessionId: "session-affinity" }, model);
 
@@ -243,7 +244,7 @@ describe("openai-completions prompt caching", () => {
 	it("lets explicit headers override generated session-affinity headers", async () => {
 		const model = createModel({
 			baseUrl: "https://proxy.example.com/v1",
-			compat: { sendSessionAffinityHeaders: true },
+			compat: { sendSessionAffinityHeaders: true, sessionAffinityFormat: "openai" },
 		});
 		const { headers } = await captureRequest(
 			{

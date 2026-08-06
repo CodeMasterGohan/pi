@@ -2,6 +2,7 @@ import { Type } from "typebox";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { stream as streamOpenAIResponses } from "../src/api/openai-responses.ts";
 import { getModel } from "../src/compat.ts";
+import { MODELS } from "../src/models.generated.ts";
 import type { Model } from "../src/types.ts";
 
 type CapturedHeaders = Headers | string[][] | Record<string, string | readonly string[]> | undefined;
@@ -27,9 +28,23 @@ function getHeader(headers: CapturedHeaders, name: string): string | null {
 	return null;
 }
 
+function toOpenAIResponsesModel(model: Model<"openai-completions">): Model<"openai-responses"> {
+	const baseCompat = model.compat as Record<string, unknown> | undefined;
+	const { sessionAffinityFormat: _sessionAffinityFormat, ...restCompat } = baseCompat ?? {};
+	return {
+		...model,
+		api: "openai-responses",
+		provider: "openai",
+		baseUrl: "https://api.openai.com/v1",
+		reasoning: model.reasoning,
+		thinkingLevelMap: model.thinkingLevelMap,
+		compat: { ...restCompat, sendSessionAffinityHeaders: false } as unknown as Model<"openai-responses">["compat"],
+	} as unknown as Model<"openai-responses">;
+}
+
 async function captureOpenAIResponseHeaders(
 	options: Parameters<typeof streamOpenAIResponses>[2],
-	model: Model<"openai-responses"> = getModel("openai", "gpt-5.4"),
+	model: Model<"openai-responses"> = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 ): Promise<{
 	sessionId: string | null;
 	clientRequestId: string | null;
@@ -72,7 +87,9 @@ describe("openai-responses provider defaults", () => {
 	});
 
 	it("omits reasoning when no reasoning is requested", async () => {
-		const model = getModel("openai", "gpt-5.4");
+		// gpt-4o does not support reasoning, so the responses API should not
+		// include a reasoning parameter in the payload.
+		const model = toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-4o")!);
 		let capturedPayload: unknown;
 
 		vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -117,7 +134,7 @@ describe("openai-responses provider defaults", () => {
 		);
 
 		const stream = streamOpenAIResponses(
-			getModel("openai", "gpt-5.4"),
+			toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			{
 				messages: [
 					{
@@ -165,7 +182,10 @@ describe("openai-responses provider defaults", () => {
 		"gpt-5.6-terra",
 		"gpt-5.6-luna",
 	] as const)("sends none reasoning effort for OpenAI %s when no reasoning is requested", async (modelId) => {
-		const model = getModel("openai", modelId);
+		const openRouterModel = (MODELS.openrouter as Record<string, Model<any>>)[
+			`openai/${modelId}`
+		] as Model<"openai-completions">;
+		const model = toOpenAIResponsesModel(openRouterModel);
 		let capturedPayload: unknown;
 
 		vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -201,7 +221,9 @@ describe("openai-responses provider defaults", () => {
 	it.each(["gpt-5", "gpt-5-mini", "gpt-5-nano", "gpt-5-pro", "gpt-5.2-pro", "gpt-5.4-pro", "gpt-5.5-pro"] as const)(
 		"omits reasoning effort for OpenAI %s when off is unsupported",
 		async (modelId) => {
-			const model = getModel("openai", modelId);
+			const model = toOpenAIResponsesModel(
+				getModel("openrouter", `openai/${modelId}`) as Model<"openai-completions">,
+			);
 			let capturedPayload: unknown;
 
 			vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -253,7 +275,7 @@ describe("openai-responses provider defaults", () => {
 		);
 
 		const stream = streamOpenAIResponses(
-			getModel("openai", "gpt-5.4"),
+			toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			{
 				systemPrompt: "sys",
 				messages: [{ role: "user", content: "hi", timestamp: Date.now() }],
@@ -276,7 +298,7 @@ describe("openai-responses provider defaults", () => {
 
 	it("sets cache-affinity headers for proxy OpenAI Responses requests with a sessionId", async () => {
 		const proxyModel: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "opencode",
 			baseUrl: "https://proxy.example.com/v1",
 		};
@@ -288,7 +310,7 @@ describe("openai-responses provider defaults", () => {
 
 	it("uses OpenRouter session-affinity header when configured", async () => {
 		const proxyModel: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "proxy",
 			baseUrl: "https://proxy.example.com/v1",
 			compat: { sessionAffinityFormat: "openrouter" },
@@ -313,7 +335,7 @@ describe("openai-responses provider defaults", () => {
 
 	it("auto-detects OpenRouter session-affinity header for OpenRouter Responses endpoints", async () => {
 		const openRouterModel: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "openrouter",
 			baseUrl: "https://openrouter.ai/api/v1",
 		};
@@ -337,7 +359,7 @@ describe("openai-responses provider defaults", () => {
 
 	it("uses OpenAI no-session format when configured", async () => {
 		const proxyModel: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "proxy",
 			baseUrl: "https://proxy.example.com/v1",
 			compat: { sessionAffinityFormat: "openai-nosession" },
@@ -362,7 +384,7 @@ describe("openai-responses provider defaults", () => {
 
 	it("can omit OpenAI session_id header while preserving other affinity data", async () => {
 		const proxyModel: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "opencode",
 			baseUrl: "https://proxy.example.com/v1",
 			compat: { sessionAffinityFormat: "openai-nosession" },
@@ -408,7 +430,10 @@ describe("openai-responses provider defaults", () => {
 		["gpt-5.5", "priority", 2.5],
 		["gpt-5.5", "flex", 0.5],
 	] as const)("applies %s %s service-tier cost multiplier", async (modelId, serviceTier, multiplier) => {
-		const model = getModel("openai", modelId);
+		const openRouterModel = (MODELS.openrouter as Record<string, Model<any>>)[
+			`openai/${modelId}`
+		] as Model<"openai-completions">;
+		const model = toOpenAIResponsesModel(openRouterModel);
 		const tokenCount = 100_000;
 		const tokenScale = tokenCount / 1_000_000;
 		const sse = `${[

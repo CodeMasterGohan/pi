@@ -18,10 +18,7 @@ import type { ModelRuntime } from "./model-runtime.ts";
 
 /** Default model IDs for each known provider */
 export const defaultModelPerProvider: Record<KnownProvider, string> = {
-	openai: "gpt-5.5",
 	openrouter: "moonshotai/kimi-k2.6",
-	zai: "glm-5.1",
-	xiaomi: "mimo-v2.5-pro",
 };
 
 export interface ScopedModel {

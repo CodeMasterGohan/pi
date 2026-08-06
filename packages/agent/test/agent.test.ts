@@ -29,7 +29,7 @@ function createAssistantMessage(text: string): AssistantMessage {
 		role: "assistant",
 		content: [{ type: "text", text }],
 		api: "openai-responses",
-		provider: "openai",
+		provider: "openrouter",
 		model: "mock",
 		usage: {
 			input: 0,
@@ -51,7 +51,7 @@ function createAssistantToolUseMessage(content: ToolCallContent[]): AssistantMes
 		role: "assistant",
 		content,
 		api: "openai-responses",
-		provider: "openai",
+		provider: "openrouter",
 		model: "mock",
 		usage: {
 			input: 0,
@@ -119,7 +119,7 @@ describe("Agent", () => {
 	});
 
 	it("should create an agent instance with custom initial state", () => {
-		const customModel = getModel("openai", "gpt-4o-mini");
+		const customModel = getModel("openrouter", "openai/gpt-4o-mini");
 		const agent = new Agent({
 			streamFn: unusedStreamFunction,
 			initialState: {

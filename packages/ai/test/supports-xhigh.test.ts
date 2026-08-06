@@ -52,17 +52,17 @@ describe("getSupportedThinkingLevels", () => {
 		expect(getSupportedThinkingLevels(model!)).not.toContain("max");
 	});
 
-	it.each(["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] as const)(
+	it.each(["openai/gpt-5.6-sol", "openai/gpt-5.6-terra", "openai/gpt-5.6-luna"] as const)(
 		"includes xhigh and max for OpenAI %s models",
 		(modelId) => {
-			const model = getModel("openai", modelId);
+			const model = getModel("openrouter", modelId);
 			expect(model).toBeDefined();
 			expect(getSupportedThinkingLevels(model!)).toEqual(["off", "low", "medium", "high", "xhigh", "max"]);
 		},
 	);
 
 	it("includes only medium/high/xhigh for OpenAI GPT-5.5 Pro", () => {
-		const model = getModel("openai", "gpt-5.5-pro");
+		const model = getModel("openrouter", "openai/gpt-5.5-pro");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["medium", "high", "xhigh"]);
 	});
@@ -74,13 +74,13 @@ describe("getSupportedThinkingLevels", () => {
 	});
 
 	it("excludes thinking off for Moonshot Kimi K2.7 Code models", () => {
-		const model = getModel("openrouter", "moonshotai/kimi-k2.5");
+		const model = getModel("openrouter", "moonshotai/kimi-k2.7-code");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["minimal", "low", "medium", "high"]);
 	});
 
 	it("uses the verified effort options for Moonshot Kimi K3", () => {
-		const model = getModel("openrouter", "moonshotai/kimi-k2.5");
+		const model = getModel("openrouter", "moonshotai/kimi-k3");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["low", "high", "max"]);
 	});

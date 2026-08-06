@@ -5,6 +5,20 @@ import { getModel, streamSimple } from "../src/compat.ts";
 import type { Api, AssistantMessage, Context, Model, Tool, ToolResultMessage, UserMessage } from "../src/types.ts";
 import { estimateContextTokens } from "../src/utils/estimate.ts";
 
+function toOpenAIResponsesModel(model: Model<"openai-completions">): Model<"openai-responses"> {
+	const baseCompat = model.compat as Record<string, unknown> | undefined;
+	const { sessionAffinityFormat: _sessionAffinityFormat, ...restCompat } = baseCompat ?? {};
+	return {
+		...model,
+		api: "openai-responses",
+		provider: "openai",
+		baseUrl: "https://api.openai.com/v1",
+		reasoning: model.reasoning,
+		thinkingLevelMap: model.thinkingLevelMap,
+		compat: { ...restCompat, sendSessionAffinityHeaders: false } as unknown as Model<"openai-responses">["compat"],
+	} as unknown as Model<"openai-responses">;
+}
+
 interface AnthropicToolPayload {
 	name: string;
 	description?: string;
@@ -180,10 +194,11 @@ describe("deferred tools", () => {
 		provider: "test-anthropic",
 		baseUrl: "https://api.anthropic.com",
 		reasoning: false,
-		input: ["text"],
+		input: ["text", "image"],
 		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: 200000,
 		maxTokens: 4096,
+		compat: { supportsToolReferences: true },
 	};
 
 	it("loads an Anthropic tool at its tool-result marker", async () => {
@@ -298,8 +313,8 @@ describe("deferred tools", () => {
 	it("uses the normal tool list when Anthropic tool references are unsupported", async () => {
 		const context = makeContext([makeTool("base_tool"), makeTool("late_tool")]);
 		const models: Model<"anthropic-messages">[] = [
-			anthropicModel,
-			{ ...anthropicModel, id: "claude-sonnet-4-20250514" },
+			{ ...anthropicModel, compat: { supportsToolReferences: false } },
+			{ ...anthropicModel, id: "claude-sonnet-4-20250514", compat: { supportsToolReferences: false } },
 		];
 
 		for (const model of models) {
@@ -393,7 +408,10 @@ describe("deferred tools", () => {
 
 	it("loads an OpenAI Responses tool through client tool search", async () => {
 		const context = makeContext([makeTool("base_tool"), makeTool("late_tool")]);
-		const payload = await capturePayload<OpenAIPayload>(getModel("openai", "gpt-5.4"), context);
+		const payload = await capturePayload<OpenAIPayload>(
+			toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
+			context,
+		);
 		const searchCall = payload.input?.find((item): item is OpenAIToolSearchCall => item.type === "tool_search_call");
 		const searchOutput = payload.input?.find(
 			(item): item is OpenAIToolSearchOutput => item.type === "tool_search_output",
@@ -409,7 +427,10 @@ describe("deferred tools", () => {
 		"uses the normal tool list for unsupported OpenAI model %s",
 		async (modelId) => {
 			const context = makeContext([makeTool("base_tool"), makeTool("late_tool")]);
-			const payload = await capturePayload<OpenAIPayload>(getModel("openai", modelId), context);
+			const payload = await capturePayload<OpenAIPayload>(
+				toOpenAIResponsesModel(getModel("openrouter", `openai/${modelId}`) as Model<"openai-completions">),
+				context,
+			);
 
 			expect(openAIToolNames(payload)).toEqual(["base_tool", "late_tool"]);
 			expect(payload.input?.some((item) => item.type === "tool_search_output")).toBe(false);
@@ -418,7 +439,7 @@ describe("deferred tools", () => {
 
 	it("uses the normal tool list when OpenAI tool search is explicitly disabled", async () => {
 		const model: Model<"openai-responses"> = {
-			...getModel("openai", "gpt-5.4"),
+			...toOpenAIResponsesModel(getModel("openrouter", "openai/gpt-5.4")!),
 			provider: "openai-proxy",
 			compat: { supportsToolSearch: false },
 		};

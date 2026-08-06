@@ -48,25 +48,22 @@ describe("builtin providers", () => {
 	});
 
 	it("stores native constrained-sampling capabilities in model metadata", () => {
-		const gpt4o = getBuiltinModel("openai", "gpt-4o");
-		expect(gpt4o.compat?.supportsStrictMode).toBe(true);
+		const gpt4o = getBuiltinModel("openrouter", "openai/gpt-4o");
+		expect(gpt4o.compat?.supportsStrictMode).toBeUndefined();
 		expect(gpt4o.compat?.supportsOpenAIGrammarTools).toBeUndefined();
-		expect(getBuiltinModel("openai", "gpt-5.4").compat).toMatchObject({
-			supportsStrictMode: true,
+		expect(getBuiltinModel("openrouter", "openai/gpt-5.4").compat).toMatchObject({
 			supportsOpenAIGrammarTools: true,
 		});
 	});
 
 	it("uses official Kimi K3 pricing for Moonshot providers", () => {
-		const models = builtinModels();
-		for (const provider of ["moonshotai", "moonshotai-cn"]) {
-			expect(models.getModel(provider, "kimi-k3")?.cost).toEqual({
-				input: 3,
-				output: 15,
-				cacheRead: 0.3,
-				cacheWrite: 0,
-			});
-		}
+		const model = getBuiltinModel("openrouter", "moonshotai/kimi-k3");
+		expect(model?.cost).toEqual({
+			input: 3,
+			output: 15,
+			cacheRead: 0.3,
+			cacheWrite: 0,
+		});
 	});
 
 	it("uses API-equivalent implied pricing for Kimi Coding subscription models", () => {
