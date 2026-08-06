@@ -3,7 +3,6 @@ import { MODELS } from "../models.generated.ts";
 import { type CreateModelsOptions, createModels, type MutableModels, type Provider } from "../models.ts";
 import type { Api, Model } from "../types.ts";
 import modelDataManifest from "./data/.manifest.json" with { type: "json" };
-import { nvidiaProvider } from "./nvidia.ts";
 import { openaiProvider } from "./openai.ts";
 import { openrouterProvider } from "./openrouter.ts";
 import { openrouterImagesProvider } from "./openrouter-images.ts";
@@ -50,14 +49,7 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 
 /** All built-in providers, freshly constructed. */
 export function builtinProviders(): Provider[] {
-	return [
-		nvidiaProvider(),
-		openaiProvider(),
-		openrouterProvider(),
-		vercelAIGatewayProvider(),
-		xiaomiProvider(),
-		zaiProvider(),
-	];
+	return [openaiProvider(), openrouterProvider(), vercelAIGatewayProvider(), xiaomiProvider(), zaiProvider()];
 }
 
 /** A `Models` collection with every built-in provider registered. */

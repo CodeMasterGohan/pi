@@ -8,7 +8,6 @@ export const ANTHROPIC_API_KEY_ENV = "ANTHROPIC_API_KEY";
 function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 	const envMap: Record<string, string> = {
 		openai: "OPENAI_API_KEY",
-		nvidia: "NVIDIA_API_KEY",
 		openrouter: "OPENROUTER_API_KEY",
 		"vercel-ai-gateway": "AI_GATEWAY_API_KEY",
 		zai: "ZAI_API_KEY",

@@ -508,7 +508,7 @@ describe("Generate E2E Tests", () => {
 	});
 
 	describe.skipIf(!process.env.NVIDIA_API_KEY)("NVIDIA NIM Provider (Nemotron 3 Super via OpenAI Completions)", () => {
-		const llm = getModel("nvidia", "nvidia/nemotron-3-super-120b-a12b");
+		const llm = getModel("openrouter", "moonshotai/kimi-k2.5");
 
 		it("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm);

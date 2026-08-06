@@ -19,7 +19,6 @@ import type { ModelRuntime } from "./model-runtime.ts";
 /** Default model IDs for each known provider */
 export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openai: "gpt-5.5",
-	nvidia: "nvidia/nemotron-3-super-120b-a12b",
 	openrouter: "moonshotai/kimi-k2.6",
 	"vercel-ai-gateway": "zai/glm-5.1",
 	zai: "glm-5.1",
