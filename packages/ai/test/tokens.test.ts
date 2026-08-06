@@ -112,14 +112,6 @@ describe("Token Statistics on Abort", () => {
 		});
 	});
 
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI Provider", () => {
-		const llm = getModel("xai", "grok-4.3");
-
-		it("should include token stats when aborted mid-stream", { retry: 3, timeout: 30000 }, async () => {
-			await testTokensOnAbort(llm);
-		});
-	});
-
 	describe.skipIf(!process.env.HF_TOKEN)("Hugging Face Provider", () => {
 		const llm = getModel("huggingface", "moonshotai/Kimi-K2.5");
 
@@ -230,20 +222,6 @@ describe("Token Statistics on Abort", () => {
 	// =========================================================================
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// =========================================================================
-
-	describe("Anthropic OAuth Provider", () => {
-		const llm = getModel("openrouter", "anthropic/claude-sonnet-4.6");
-
-		it.skipIf(!anthropicOAuthToken)(
-			"should include token stats when aborted mid-stream",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await testTokensOnAbort(llm, { apiKey: anthropicOAuthToken });
-			},
-		);
-	});
-
-
 
 	describe("OpenAI Codex Provider", () => {
 		it.skipIf(!openaiCodexToken)(

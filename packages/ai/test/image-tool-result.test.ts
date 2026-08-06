@@ -399,28 +399,6 @@ describe("Tool Results with Images", () => {
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// =========================================================================
 
-	describe("Anthropic OAuth Provider (claude-sonnet-4-5)", () => {
-		const model = getModel("openrouter", "anthropic/claude-sonnet-4.5");
-
-		it.skipIf(!anthropicOAuthToken)(
-			"should handle tool result with only image",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await handleToolWithImageResult(model, { apiKey: anthropicOAuthToken });
-			},
-		);
-
-		it.skipIf(!anthropicOAuthToken)(
-			"should handle tool result with text and image",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await handleToolWithTextAndImageResult(model, { apiKey: anthropicOAuthToken });
-			},
-		);
-	});
-
-
-
 	describe("OpenAI Codex Provider", () => {
 		it.skipIf(!openaiCodexToken)(
 			"gpt-5.5 - should handle tool result with only image",

@@ -67,9 +67,7 @@ const PROVIDER_MODEL_PAIRS: ProviderModelPair[] = [
 	// OpenAI Codex
 	{ provider: "openai-codex", model: "gpt-5.5", label: "openai-codex-gpt-5.5" },
 
-	// xAI
-	{ provider: "xai", model: "grok-4.3", label: "xai-grok-4.3" },
-	// Cerebras
+	// xAI	// Cerebras
 	{ provider: "cerebras", model: "zai-glm-4.7", label: "cerebras-zai-glm-4.7" },
 	// Cloudflare Workers AI
 	{ provider: "cloudflare-workers-ai", model: "@cf/moonshotai/kimi-k2.6", label: "cloudflare-kimi-k2.6" },

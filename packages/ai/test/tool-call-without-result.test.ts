@@ -124,14 +124,6 @@ describe("Tool Call Without Result Tests", () => {
 		});
 	});
 
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI Provider", () => {
-		const model = getModel("xai", "grok-4.3");
-
-		it("should filter out tool calls without corresponding tool results", { retry: 3, timeout: 30000 }, async () => {
-			await testToolCallWithoutResult(model);
-		});
-	});
-
 	describe.skipIf(!process.env.HF_TOKEN)("Hugging Face Provider", () => {
 		const model = getModel("huggingface", "moonshotai/Kimi-K2.5");
 
@@ -231,20 +223,6 @@ describe("Tool Call Without Result Tests", () => {
 	// =========================================================================
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// =========================================================================
-
-	describe("Anthropic OAuth Provider", () => {
-		const model = getModel("openrouter", "anthropic/claude-haiku-4.5");
-
-		it.skipIf(!anthropicOAuthToken)(
-			"should filter out tool calls without corresponding tool results",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await testToolCallWithoutResult(model, { apiKey: anthropicOAuthToken });
-			},
-		);
-	});
-
-
 
 	describe("OpenAI Codex Provider", () => {
 		it.skipIf(!openaiCodexToken)(

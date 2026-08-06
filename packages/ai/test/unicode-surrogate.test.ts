@@ -11,10 +11,7 @@ import { resolveApiKey } from "./oauth.ts";
 const emptySchema = Type.Object({});
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([
-	resolveApiKey("anthropic"),
-	resolveApiKey("openai-codex"),
-]);
+const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 /**
@@ -369,23 +366,6 @@ describe("AI Providers Unicode Surrogate Pair Tests", () => {
 				await testUnpairedHighSurrogate(llm, { apiKey: anthropicOAuthToken });
 			},
 		);
-	});
-
-
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI Provider Unicode Handling", () => {
-		const llm = getModel("xai", "grok-4.3");
-
-		it("should handle emoji in tool results", { retry: 3, timeout: 30000 }, async () => {
-			await testEmojiInToolResults(llm);
-		});
-
-		it("should handle real-world LinkedIn comment data with emoji", { retry: 3, timeout: 30000 }, async () => {
-			await testRealWorldLinkedInData(llm);
-		});
-
-		it("should handle unpaired high surrogate (0xD83D) in tool results", { retry: 3, timeout: 30000 }, async () => {
-			await testUnpairedHighSurrogate(llm);
-		});
 	});
 
 	describe.skipIf(!process.env.HF_TOKEN)("Hugging Face Provider Unicode Handling", () => {

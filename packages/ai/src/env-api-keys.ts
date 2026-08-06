@@ -66,7 +66,6 @@ function hasVertexAdcCredentials(env?: ProviderEnv): boolean {
 }
 
 function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
-
 	const envMap: Record<string, string> = {
 		"qwen-token-plan": "QWEN_TOKEN_PLAN_API_KEY",
 		"qwen-token-plan-cn": "QWEN_TOKEN_PLAN_CN_API_KEY",
@@ -74,7 +73,6 @@ function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 		nvidia: "NVIDIA_API_KEY",
 		google: "GEMINI_API_KEY",
 		"google-vertex": "GOOGLE_CLOUD_API_KEY",
-		xai: "XAI_API_KEY",
 		radius: "RADIUS_API_KEY",
 		openrouter: "OPENROUTER_API_KEY",
 		"vercel-ai-gateway": "AI_GATEWAY_API_KEY",

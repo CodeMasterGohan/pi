@@ -84,8 +84,6 @@ describe("responseId E2E Tests", () => {
 		});
 	});
 
-
-
 	describe("OpenAI Codex Provider", () => {
 		it.skipIf(!openaiCodexToken)("should expose responseId", { retry: 3, timeout: 30000 }, async () => {
 			const llm = getModel("openai-codex", "gpt-5.5");

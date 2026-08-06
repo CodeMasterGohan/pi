@@ -212,7 +212,7 @@ export const streamSimple: StreamFunction<"openai-responses", SimpleStreamOption
 
 function createClient(
 	model: Model<"openai-responses">,
-	context: Context,
+	_context: Context,
 	apiKey: string,
 	optionsHeaders?: ProviderHeaders,
 	fetch?: typeof globalThis.fetch,
@@ -220,7 +220,6 @@ function createClient(
 ) {
 	const compat = getCompat(model);
 	const headers: ProviderHeaders = { ...model.headers };
-
 
 	if (sessionId) {
 		if (compat.sessionAffinityFormat === "openrouter") {
@@ -317,7 +316,6 @@ function buildParams(
 				effort: (model.thinkingLevelMap?.off ?? "none") as NonNullable<typeof params.reasoning>["effort"],
 			};
 		}
-		if (model.provider === "xai") params.include = ["reasoning.encrypted_content"];
 	}
 
 	// Last so custom keys override the named request fields.

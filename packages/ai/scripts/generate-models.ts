@@ -318,21 +318,6 @@ const OPENAI_RESPONSES_NONE_REASONING_MODELS = new Set([
 	"gpt-5.6-terra",
 	"gpt-5.6-luna",
 ]);
-const XAI_RESPONSES_MODEL_ID = "grok-4.5";
-const XAI_BUILTIN_EXCLUDED_MODEL_IDS = new Set([
-	"grok-3",
-	"grok-3-fast",
-	"grok-4.20-0309-non-reasoning",
-	"grok-4.20-0309-reasoning",
-	"grok-code-fast-1",
-]);
-const XAI_RESPONSES_EFFORT_LEVEL_MAP = {
-	off: null,
-	minimal: null,
-} as const;
-const XAI_RESPONSES_COMPAT: OpenAIResponsesCompat = {
-	supportsLongCacheRetention: false,
-};
 
 const OPENCODE_OPENAI_COMPLETIONS_LONG_CACHE_RETENTION_UNSUPPORTED_MODELS = new Set([
 	"opencode:deepseek-v4-flash",
@@ -493,8 +478,7 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 
 	const isNonStandard =
 		isNvidia ||
-		provider === "xai" ||
-		baseUrl.includes("api.x.ai") ||
+				baseUrl.includes("api.x.ai") ||
 		baseUrl.includes("chutes.ai") ||
 		baseUrl.includes("deepseek.com") ||
 		isZai ||
@@ -507,7 +491,7 @@ function detectOpenAICompletionsCompat(model: Model<"openai-completions">): Open
 	const useMaxTokens =
 		baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isNvidia || isZai;
 
-	const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
+	const isGrok = baseUrl.includes("api.x.ai");
 	const isDeepSeek = provider === "deepseek" || baseUrl.includes("deepseek.com");
 	const isOpenRouterDeveloperRoleModel =
 		isOpenRouter && (model.id.startsWith("anthropic/") || model.id.startsWith("openai/"));
@@ -661,9 +645,6 @@ function applyThinkingLevelMetadata(model: Model<any>): void {
 		OPENAI_RESPONSES_NONE_REASONING_MODELS.has(model.id)
 	) {
 		mergeThinkingLevelMap(model, { off: "none" });
-	}
-	if (model.provider === "xai" && model.api === "openai-responses" && model.id === XAI_RESPONSES_MODEL_ID) {
-		mergeThinkingLevelMap(model, XAI_RESPONSES_EFFORT_LEVEL_MAP);
 	}
 	if (supportsOpenAiXhigh(model.id)) {
 		mergeThinkingLevelMap(model, { xhigh: "xhigh" });
@@ -1074,34 +1055,6 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 
 
 
-		// Process xAi models
-		if (data.xai?.models) {
-			for (const [modelId, model] of Object.entries(data.xai.models)) {
-				const m = model as ModelsDevModel;
-				if (m.tool_call !== true) continue;
-				const useResponsesApi = modelId === XAI_RESPONSES_MODEL_ID;
-
-				models.push({
-					id: modelId,
-					name: m.name || modelId,
-					api: useResponsesApi ? "openai-responses" : "openai-completions",
-					provider: "xai",
-					baseUrl: "https://api.x.ai/v1",
-					...(useResponsesApi ? { compat: { ...XAI_RESPONSES_COMPAT } } : {}),
-					reasoning: m.reasoning === true,
-					input: m.modalities?.input?.includes("image") ? ["text", "image"] : ["text"],
-					cost: {
-						input: m.cost?.input || 0,
-						output: m.cost?.output || 0,
-						cacheRead: m.cost?.cache_read || 0,
-						cacheWrite: m.cost?.cache_write || 0,
-					},
-					contextWindow: m.limit?.context || 4096,
-					maxTokens: m.limit?.output || 4096,
-				});
-				recordModelsDevReasoningOptions("xai", modelId, m);
-			}
-		}
 
 		// Process zAi models
 		const zaiCodingPlanVariants = [
@@ -1626,8 +1579,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 async function generateModels() {
 	// Fetch models from both sources
 	// models.dev: Anthropic, Google, OpenAI, Groq, Cerebras
-	// OpenRouter: xAI and other providers (excluding Anthropic, Google, OpenAI)
-	// AI Gateway: OpenAI-compatible catalog with tool-capable models
+		// AI Gateway: OpenAI-compatible catalog with tool-capable models
 	const modelsDevModels = await loadModelsDevData();
 	const openRouterModels = await fetchOpenRouterModels();
 	const aiGatewayModels = await fetchAiGatewayModels();
@@ -1635,8 +1587,7 @@ async function generateModels() {
 	// Combine models (models.dev has priority)
 	const allModels = [...modelsDevModels, ...openRouterModels, ...aiGatewayModels].filter(
 		(model) =>
-			!(model.provider === "xai" && XAI_BUILTIN_EXCLUDED_MODEL_IDS.has(model.id)) &&
-			!((model.provider === "opencode" || model.provider === "opencode-go") && model.id === "gpt-5.3-codex-spark"),
+						!((model.provider === "opencode" || model.provider === "opencode-go") && model.id === "gpt-5.3-codex-spark"),
 	);
 
 	// Temporary overrides until upstream model metadata is corrected.

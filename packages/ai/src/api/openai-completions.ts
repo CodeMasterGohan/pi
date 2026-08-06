@@ -630,7 +630,7 @@ export const streamSimple: StreamFunction<"openai-completions", SimpleStreamOpti
 
 function createClient(
 	model: Model<"openai-completions">,
-	context: Context,
+	_context: Context,
 	apiKey: string,
 	optionsHeaders?: ProviderHeaders,
 	fetch?: typeof globalThis.fetch,
@@ -638,7 +638,6 @@ function createClient(
 	compat: ResolvedOpenAICompletionsCompat = getCompat(model),
 ) {
 	const headers: ProviderHeaders = { ...model.headers };
-
 
 	if (sessionId && compat.sendSessionAffinityHeaders) {
 		if (compat.sessionAffinityFormat === "openrouter") {
@@ -1393,7 +1392,6 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 
 	const isNonStandard =
 		isNvidia ||
-		provider === "xai" ||
 		baseUrl.includes("api.x.ai") ||
 		baseUrl.includes("chutes.ai") ||
 		baseUrl.includes("deepseek.com") ||
@@ -1406,7 +1404,7 @@ function detectCompat(model: Model<"openai-completions">): ResolvedOpenAIComplet
 
 	const useMaxTokens = baseUrl.includes("chutes.ai") || isMoonshot || isCloudflareAiGateway || isNvidia || isZai;
 
-	const isGrok = provider === "xai" || baseUrl.includes("api.x.ai");
+	const isGrok = baseUrl.includes("api.x.ai");
 	const isDeepSeek = provider === "deepseek" || baseUrl.includes("deepseek.com");
 	const isOpenRouterDeveloperRoleModel =
 		isOpenRouter && (model.id.startsWith("anthropic/") || model.id.startsWith("openai/"));

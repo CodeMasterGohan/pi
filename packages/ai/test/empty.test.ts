@@ -7,10 +7,7 @@ type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 import { resolveApiKey } from "./oauth.ts";
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([
-	resolveApiKey("anthropic"),
-	resolveApiKey("openai-codex"),
-]);
+const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 async function testEmptyMessage<TApi extends Api>(llm: Model<TApi>, options: StreamOptionsWithExtras = {}) {
@@ -202,26 +199,6 @@ describe("AI Providers Empty Message Tests", () => {
 
 	describe.skipIf(!process.env.ANTHROPIC_API_KEY)("Anthropic Provider Empty Messages", () => {
 		const llm = getModel("openrouter", "anthropic/claude-haiku-4.5");
-
-		it("should handle empty content array", { retry: 3, timeout: 30000 }, async () => {
-			await testEmptyMessage(llm);
-		});
-
-		it("should handle empty string content", { retry: 3, timeout: 30000 }, async () => {
-			await testEmptyStringMessage(llm);
-		});
-
-		it("should handle whitespace-only content", { retry: 3, timeout: 30000 }, async () => {
-			await testWhitespaceOnlyMessage(llm);
-		});
-
-		it("should handle empty assistant message in conversation", { retry: 3, timeout: 30000 }, async () => {
-			await testEmptyAssistantMessage(llm);
-		});
-	});
-
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI Provider Empty Messages", () => {
-		const llm = getModel("xai", "grok-4.3");
 
 		it("should handle empty content array", { retry: 3, timeout: 30000 }, async () => {
 			await testEmptyMessage(llm);
@@ -520,7 +497,6 @@ describe("AI Providers Empty Message Tests", () => {
 			},
 		);
 	});
-
 
 	describe("OpenAI Codex Provider Empty Messages", () => {
 		it.skipIf(!openaiCodexToken)(

@@ -16,7 +16,6 @@ type OAuthFlowLoaders = {
 
 	openrouter: () => OAuthAuth | Promise<OAuthAuth>;
 	kimiCoding: () => OAuthAuth | Promise<OAuthAuth>;
-	xai: () => OAuthAuth | Promise<OAuthAuth>;
 	radius: (options: { name: string; gateway: string }) => OAuthAuth | Promise<OAuthAuth>;
 };
 
@@ -32,8 +31,6 @@ export const loadOpenAICodexOAuth = async (): Promise<OAuthAuth> => {
 	return ((await importOAuthModule("./openai-codex.ts")) as { openaiCodexOAuth: OAuthAuth }).openaiCodexOAuth;
 };
 
-
-
 export const loadOpenRouterOAuth = async (): Promise<OAuthAuth> => {
 	if (bundledLoaders) return bundledLoaders.openrouter();
 	return ((await importOAuthModule("./openrouter.ts")) as { openRouterOAuth: OAuthAuth }).openRouterOAuth;
@@ -42,11 +39,6 @@ export const loadOpenRouterOAuth = async (): Promise<OAuthAuth> => {
 export const loadKimiCodingOAuth = async (): Promise<OAuthAuth> => {
 	if (bundledLoaders) return bundledLoaders.kimiCoding();
 	return ((await importOAuthModule("./kimi-coding.ts")) as { kimiCodingOAuth: OAuthAuth }).kimiCodingOAuth;
-};
-
-export const loadXaiOAuth = async (): Promise<OAuthAuth> => {
-	if (bundledLoaders) return bundledLoaders.xai();
-	return ((await importOAuthModule("./xai.ts")) as { xaiOAuth: OAuthAuth }).xaiOAuth;
 };
 
 export const loadRadiusOAuth = async (options: { name: string; gateway: string }): Promise<OAuthAuth> => {

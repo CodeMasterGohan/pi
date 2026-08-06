@@ -41,8 +41,6 @@ Anthropic subscription auth is active for Claude Pro/Max accounts. Third-party h
 
 ### xAI (Grok/X subscription)
 
-- Run `/login xai`, then select **Use a subscription**
-- `XAI_API_KEY` remains available through **Use an API key**
 
 ### OpenRouter
 
@@ -81,7 +79,6 @@ pi
 | Cerebras | `CEREBRAS_API_KEY` | `cerebras` |
 | Cloudflare AI Gateway | `CLOUDFLARE_API_KEY` (+ `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_GATEWAY_ID`) | `cloudflare-ai-gateway` |
 | Cloudflare Workers AI | `CLOUDFLARE_API_KEY` (+ `CLOUDFLARE_ACCOUNT_ID`) | `cloudflare-workers-ai` |
-| xAI | `XAI_API_KEY` | `xai` |
 | OpenRouter | `OPENROUTER_API_KEY` | `openrouter` |
 | Vercel AI Gateway | `AI_GATEWAY_API_KEY` | `vercel-ai-gateway` |
 | ZAI Coding Plan (Global) | `ZAI_API_KEY` | `zai` |

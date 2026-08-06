@@ -842,7 +842,7 @@ function createClient(
 	useFineGrainedToolStreamingBeta: boolean,
 	optionsHeaders?: ProviderHeaders,
 	fetch?: typeof globalThis.fetch,
-	dynamicHeaders?: Record<string, string>,
+	_dynamicHeaders?: Record<string, string>,
 	sessionId?: string,
 ): { client: Anthropic; isOAuthToken: boolean } {
 	// Adaptive thinking models have interleaved thinking built in, so skip the beta header.
@@ -854,8 +854,6 @@ function createClient(
 	if (needsInterleavedBeta) {
 		betaFeatures.push(INTERLEAVED_THINKING_BETA);
 	}
-
-
 
 	// OAuth: Bearer auth, Claude Code identity headers
 	if (apiKey && isOAuthToken(apiKey)) {

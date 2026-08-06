@@ -21,10 +21,7 @@ type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 import { resolveApiKey } from "./oauth.ts";
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([
-	resolveApiKey("anthropic"),
-	resolveApiKey("openai-codex"),
-]);
+const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 // Generate a long system prompt to trigger caching (>2k bytes for most providers)
@@ -217,21 +214,6 @@ describe("totalTokens field", () => {
 	// =========================================================================
 	// xAI
 	// =========================================================================
-
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI", () => {
-		it("grok-4.3 - should return totalTokens equal to sum of components", { retry: 3, timeout: 60000 }, async () => {
-			const llm = getModel("xai", "grok-4.3");
-
-			console.log(`\nxAI / ${llm.id}:`);
-			const { first, second } = await testTotalTokensWithCache(llm, { apiKey: process.env.XAI_API_KEY });
-
-			logUsage("First request", first);
-			logUsage("Second request", second);
-
-			assertTotalTokensEqualsComponents(first);
-			assertTotalTokensEqualsComponents(second);
-		});
-	});
 
 	// =========================================================================
 	// Hugging Face
@@ -601,8 +583,6 @@ describe("totalTokens field", () => {
 			},
 		);
 	});
-
-
 
 	// =========================================================================
 	// =========================================================================

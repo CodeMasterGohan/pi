@@ -372,8 +372,7 @@ ${chalk.bold("Environment Variables:")}
   GEMINI_API_KEY                   - Google Gemini API key
   GROQ_API_KEY                     - Groq API key
   CEREBRAS_API_KEY                 - Cerebras API key
-  XAI_API_KEY                      - xAI Grok API key
-  FIREWORKS_API_KEY                - Fireworks API key
+    FIREWORKS_API_KEY                - Fireworks API key
   TOGETHER_API_KEY                 - Together AI API key
   BASETEN_API_KEY                  - Baseten API key
   OPENROUTER_API_KEY               - OpenRouter API key

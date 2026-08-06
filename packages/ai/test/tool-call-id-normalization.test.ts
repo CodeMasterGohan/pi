@@ -34,8 +34,8 @@ const echoTool: Tool<typeof echoToolSchema> = {
 /**
  * Test 1: Live cross-provider handoff
  *
- * 1. Use openai-codex gpt-5.2-codex to generate a tool call
- * 2. Switch to openrouter openai/gpt-5.2-codex and complete
+ * 1. Use openai-codex gpt-5.3-codex-spark to generate a tool call
+ * 2. Switch to openrouter openai/gpt-5.4 and complete
  *
  * Should succeed without "call_id too long" errors.
  */
@@ -43,8 +43,8 @@ describe("Tool Call ID Normalization - Live Handoff", () => {
 	it.skipIf(!codexToken || !openrouterKey)(
 		"openai-codex -> openrouter should normalize pipe-separated IDs",
 		async () => {
-			const codexModel = getModel("openai-codex", "gpt-5.2-codex");
-			const openrouterModel = getModel("openrouter", "openai/gpt-5.2-codex");
+			const codexModel = getModel("openai-codex", "gpt-5.3-codex-spark");
+			const openrouterModel = getModel("openrouter", "openai/gpt-5.4");
 
 			// Step 1: Generate tool call with openai-codex
 			const userMessage: Message = {
@@ -142,7 +142,7 @@ describe("Tool Call ID Normalization - Prefilled Context", () => {
 			],
 			api: "openai-responses",
 			provider: "openai-codex",
-			model: "gpt-5.2-codex",
+			model: "gpt-5.3-codex-spark",
 			usage: {
 				input: 100,
 				output: 50,
@@ -176,7 +176,7 @@ describe("Tool Call ID Normalization - Prefilled Context", () => {
 	it.skipIf(!openrouterKey)(
 		"openrouter should handle prefilled context with long pipe-separated IDs",
 		async () => {
-			const model = getModel("openrouter", "openai/gpt-5.2-codex");
+			const model = getModel("openrouter", "openai/gpt-5.4");
 			const messages = buildPrefilledMessages();
 
 			const response = await completeSimple(

@@ -54,8 +54,6 @@ afterEach(() => {
 });
 
 describe("environment API keys", () => {
-
-
 	it("resolves ZAI China Coding Plan credentials from ZAI_CODING_CN_API_KEY", () => {
 		process.env.ZAI_CODING_CN_API_KEY = "zai-coding-cn-token";
 

@@ -17,10 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([
-	resolveApiKey("anthropic"),
-	resolveApiKey("openai-codex"),
-]);
+const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 // Calculator tool definition (same as examples)
@@ -487,30 +484,6 @@ describe("Generate E2E Tests", () => {
 
 		it("should handle image input", { retry: 3 }, async () => {
 			await handleImage(model);
-		});
-	});
-
-	describe.skipIf(!process.env.XAI_API_KEY)("xAI Provider (grok-4.3 via OpenAI Completions)", () => {
-		const llm = getModel("xai", "grok-4.3");
-
-		it("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(llm);
-		});
-
-		it("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(llm);
-		});
-
-		it("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(llm);
-		});
-
-		it("should handle thinking mode", { retry: 3 }, async () => {
-			await handleThinking(llm, { reasoningEffort: "medium" });
-		});
-
-		it("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			await multiTurn(llm, { reasoningEffort: "medium" });
 		});
 	});
 
@@ -1047,7 +1020,6 @@ describe("Generate E2E Tests", () => {
 			await handleImage(model, { apiKey: anthropicOAuthToken });
 		});
 	});
-
 
 	describe("OpenAI Codex Provider (gpt-5.4)", () => {
 		const llm = getModel("openai-codex", "gpt-5.4");
