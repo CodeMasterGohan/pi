@@ -41,7 +41,6 @@ export type KnownProvider =
 	| "minimax"
 	| "moonshotai"
 	| "huggingface"
-	| "opencode-go"
 	| "xiaomi";
 export type ProviderId = KnownProvider | string;
 
