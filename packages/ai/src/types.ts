@@ -40,7 +40,6 @@ export type KnownProvider =
 	| "mistral"
 	| "minimax"
 	| "moonshotai"
-	| "moonshotai-cn"
 	| "huggingface"
 	| "opencode-go"
 	| "xiaomi";

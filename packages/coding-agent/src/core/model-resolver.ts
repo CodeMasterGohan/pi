@@ -28,7 +28,6 @@ export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	mistral: "devstral-medium-latest",
 	minimax: "MiniMax-M2.7",
 	moonshotai: "kimi-k2.6",
-	"moonshotai-cn": "kimi-k2.6",
 	huggingface: "moonshotai/Kimi-K2.6",
 	xiaomi: "mimo-v2.5-pro",
 };

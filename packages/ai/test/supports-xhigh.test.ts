@@ -86,16 +86,13 @@ describe("getSupportedThinkingLevels", () => {
 	});
 
 	it("excludes thinking off for Moonshot Kimi K2.7 Code models", () => {
-		const cases = [getModel("moonshotai", "kimi-k2.7-code"), getModel("moonshotai-cn", "kimi-k2.7-code")];
-
-		for (const model of cases) {
-			expect(model).toBeDefined();
-			expect(getSupportedThinkingLevels(model!)).toEqual(["minimal", "low", "medium", "high"]);
-		}
+		const model = getModel("moonshotai", "kimi-k2.7-code");
+		expect(model).toBeDefined();
+		expect(getSupportedThinkingLevels(model!)).toEqual(["minimal", "low", "medium", "high"]);
 	});
 
-	it.each(["moonshotai", "moonshotai-cn"] as const)("uses the verified effort options for %s Kimi K3", (provider) => {
-		const model = getModel(provider, "kimi-k3");
+	it("uses the verified effort options for Moonshot Kimi K3", () => {
+		const model = getModel("moonshotai", "kimi-k3");
 		expect(model).toBeDefined();
 		expect(getSupportedThinkingLevels(model!)).toEqual(["low", "high", "max"]);
 	});
