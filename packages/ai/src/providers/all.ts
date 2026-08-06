@@ -7,7 +7,6 @@ import { googleProvider } from "./google.ts";
 import { googleVertexProvider } from "./google-vertex.ts";
 import { huggingfaceProvider } from "./huggingface.ts";
 import { minimaxProvider } from "./minimax.ts";
-import { minimaxCnProvider } from "./minimax-cn.ts";
 import { mistralProvider } from "./mistral.ts";
 import { moonshotaiProvider } from "./moonshotai.ts";
 import { moonshotaiCnProvider } from "./moonshotai-cn.ts";
@@ -63,7 +62,6 @@ export function builtinProviders(): Provider[] {
 		googleVertexProvider(),
 		huggingfaceProvider(),
 		minimaxProvider(),
-		minimaxCnProvider(),
 		mistralProvider(),
 		moonshotaiProvider(),
 		moonshotaiCnProvider(),

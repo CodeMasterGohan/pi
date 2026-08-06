@@ -82,7 +82,6 @@ pi
 | Baseten | `BASETEN_API_KEY` | `baseten` |
 | Kimi For Coding | `KIMI_API_KEY` | `kimi-coding` |
 | MiniMax | `MINIMAX_API_KEY` | `minimax` |
-| MiniMax (China) | `MINIMAX_CN_API_KEY` | `minimax-cn` |
 | Qwen Token Plan | `QWEN_TOKEN_PLAN_API_KEY` | `qwen-token-plan` |
 | Qwen Token Plan (China) | `QWEN_TOKEN_PLAN_CN_API_KEY` | `qwen-token-plan-cn` |
 | Xiaomi MiMo | `XIAOMI_API_KEY` | `xiaomi` |

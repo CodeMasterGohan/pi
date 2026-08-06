@@ -39,7 +39,6 @@ export type KnownProvider =
 	| "zai"
 	| "mistral"
 	| "minimax"
-	| "minimax-cn"
 	| "moonshotai"
 	| "moonshotai-cn"
 	| "huggingface"
