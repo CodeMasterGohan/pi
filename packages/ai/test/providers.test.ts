@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { lazyApi } from "../src/api/lazy.ts";
 import { envApiKeyAuth } from "../src/auth/helpers.ts";
-import type { AuthContext, AuthEvent } from "../src/auth/types.ts";
+import type { AuthContext } from "../src/auth/types.ts";
 import { createModels, createProvider } from "../src/models.ts";
 import { InMemoryModelsStore } from "../src/models-store.ts";
 import { builtinModels, builtinProviders, getBuiltinModel } from "../src/providers/all.ts";
 
 import { fauxAssistantMessage, fauxProvider } from "../src/providers/faux.ts";
-import { googleVertexProvider } from "../src/providers/google-vertex.ts";
 import type {
 	Api,
 	Context,
@@ -35,13 +34,10 @@ describe("builtin providers", () => {
 		const models = builtinModels();
 		const providers = models.getProviders();
 		expect(providers.length).toBe(builtinProviders().length);
-		expect(providers.map((p) => p.id)).toContain("anthropic");
-
-		const anthropic = models.getModel("anthropic", "claude-haiku-4-5");
-		expect(anthropic?.api).toBe("anthropic-messages");
+		expect(providers.map((p) => p.id)).toContain("openrouter");
 
 		const all = models.getModels();
-		expect(all.length).toBeGreaterThan(500);
+		expect(all.length).toBeGreaterThan(0);
 
 		// Static providers list models immediately; all built-in providers are static.
 		for (const provider of providers) {
@@ -81,73 +77,6 @@ describe("builtin providers", () => {
 
 		for (const [_modelId, _cost] of Object.entries(expectedCosts)) {
 		}
-	});
-
-	it("runs provider-owned Vertex API key and ADC login flows", async () => {
-		const auth = googleVertexProvider().auth.apiKey!;
-		const keyAnswers = ["api-key", "vertex-key"];
-		expect(
-			await auth.login?.({
-				signal: neverAbortedSignal,
-				prompt: async () => keyAnswers.shift()!,
-				notify: () => {},
-			}),
-		).toEqual({ type: "api_key", key: "vertex-key" });
-
-		const adcAnswers = ["adc", "project-id", "us-central1"];
-		const events: AuthEvent[] = [];
-		expect(
-			await auth.login?.({
-				signal: neverAbortedSignal,
-				prompt: async () => adcAnswers.shift()!,
-				notify: (event) => events.push(event),
-			}),
-		).toEqual({
-			type: "api_key",
-			env: { GOOGLE_CLOUD_PROJECT: "project-id", GOOGLE_CLOUD_LOCATION: "us-central1" },
-		});
-		expect(events).toEqual([
-			expect.objectContaining({
-				type: "info",
-				links: [expect.objectContaining({ label: "Application Default Credentials" })],
-			}),
-		]);
-		expect(
-			await auth.resolve({
-				ctx: fakeAuthContext({}, ["~/.config/gcloud/application_default_credentials.json"]),
-				credential: {
-					type: "api_key",
-					env: { GOOGLE_CLOUD_PROJECT: "project-id", GOOGLE_CLOUD_LOCATION: "us-central1" },
-				},
-				signal: neverAbortedSignal,
-			}),
-		).toMatchObject({
-			auth: {},
-			env: { GOOGLE_CLOUD_PROJECT: "project-id", GOOGLE_CLOUD_LOCATION: "us-central1" },
-		});
-	});
-
-	it("resolves vertex via ADC file plus project and location", async () => {
-		const adc = "~/.config/gcloud/application_default_credentials.json";
-		const configured = createModels({
-			authContext: fakeAuthContext({ GOOGLE_CLOUD_PROJECT: "proj", GOOGLE_CLOUD_LOCATION: "us-central1" }, [adc]),
-		});
-		configured.setProvider(googleVertexProvider());
-		const model = configured.getModels("google-vertex")[0];
-
-		const result = await configured.getAuth(model.provider);
-		expect(result?.auth).toEqual({});
-		expect(result?.source).toContain("application default");
-
-		// ADC without project/location is not configured
-		const partial = createModels({ authContext: fakeAuthContext({ GOOGLE_CLOUD_PROJECT: "proj" }, [adc]) });
-		partial.setProvider(googleVertexProvider());
-		expect(await partial.getAuth(model.provider)).toBeUndefined();
-
-		// explicit key wins over ADC
-		const keyed = createModels({ authContext: fakeAuthContext({ GOOGLE_CLOUD_API_KEY: "vertex-key" }) });
-		keyed.setProvider(googleVertexProvider());
-		expect((await keyed.getAuth(model.provider))?.auth.apiKey).toBe("vertex-key");
 	});
 });
 

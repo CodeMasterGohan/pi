@@ -134,7 +134,7 @@ async function testEmptyAssistantMessage<TApi extends Api>(llm: Model<TApi>, opt
 
 describe("AI Providers Empty Message Tests", () => {
 	describe.skipIf(!process.env.GEMINI_API_KEY)("Google Provider Empty Messages", () => {
-		const llm = getModel("google", "gemini-2.5-flash");
+		const llm = getModel("openrouter", "google/gemini-2.5-flash");
 
 		it("should handle empty content array", { retry: 3, timeout: 30000 }, async () => {
 			await testEmptyMessage(llm);

@@ -1,7 +1,5 @@
 import type { AnthropicOptions } from "./api/anthropic-messages.ts";
 import type { AzureOpenAIResponsesOptions } from "./api/azure-openai-responses.ts";
-import type { GoogleOptions } from "./api/google-generative-ai.ts";
-import type { GoogleVertexOptions } from "./api/google-vertex.ts";
 import type { MistralOptions } from "./api/mistral-conversations.ts";
 import type { OpenAICodexResponsesOptions } from "./api/openai-codex-responses.ts";
 import type { OpenAICompletionsOptions } from "./api/openai-completions.ts";
@@ -30,8 +28,6 @@ export type KnownImagesApi = "openrouter-images";
 export type ImagesApi = KnownImagesApi | (string & {});
 
 export type KnownProvider =
-	| "google"
-	| "google-vertex"
 	| "openai"
 	| "nvidia"
 	| "openrouter"
@@ -209,8 +205,6 @@ export interface ApiOptionsMap {
 	"openai-responses": OpenAIResponsesOptions;
 	"openai-codex-responses": OpenAICodexResponsesOptions;
 	"azure-openai-responses": AzureOpenAIResponsesOptions;
-	"google-generative-ai": GoogleOptions;
-	"google-vertex": GoogleVertexOptions;
 	"mistral-conversations": MistralOptions;
 	"pi-messages": PiMessagesOptions;
 }

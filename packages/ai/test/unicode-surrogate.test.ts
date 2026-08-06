@@ -273,7 +273,7 @@ async function testUnpairedHighSurrogate<TApi extends Api>(llm: Model<TApi>, opt
 
 describe("AI Providers Unicode Surrogate Pair Tests", () => {
 	describe.skipIf(!process.env.GEMINI_API_KEY)("Google Provider Unicode Handling", () => {
-		const llm = getModel("google", "gemini-2.5-flash");
+		const llm = getModel("openrouter", "google/gemini-2.5-flash");
 
 		it("should handle emoji in tool results", { retry: 3, timeout: 30000 }, async () => {
 			await testEmojiInToolResults(llm);

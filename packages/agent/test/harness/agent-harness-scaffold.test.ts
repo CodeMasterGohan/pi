@@ -10,7 +10,7 @@ describe("AgentHarness v2 scaffold", () => {
 		const { harness, suspended } = await AgentHarness.create({
 			session,
 			models: createModels(),
-			model: getModel("google", "gemini-2.5-flash"),
+			model: getModel("openrouter", "google/gemini-2.5-flash"),
 		});
 
 		expect(suspended).toEqual([]);
@@ -24,7 +24,7 @@ describe("AgentHarness v2 scaffold", () => {
 		const { harness } = await AgentHarness.create({
 			session,
 			models: createModels(),
-			model: getModel("google", "gemini-2.5-flash"),
+			model: getModel("openrouter", "google/gemini-2.5-flash"),
 		});
 
 		await expect(harness.prompt("hello")).rejects.toBeInstanceOf(HarnessNotImplemented);

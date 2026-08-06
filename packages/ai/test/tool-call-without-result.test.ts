@@ -85,7 +85,7 @@ describe("Tool Call Without Result Tests", () => {
 	// =========================================================================
 
 	describe.skipIf(!process.env.GEMINI_API_KEY)("Google Provider", () => {
-		const model = getModel("google", "gemini-2.5-flash");
+		const model = getModel("openrouter", "google/gemini-2.5-flash");
 
 		it("should filter out tool calls without corresponding tool results", { retry: 3, timeout: 30000 }, async () => {
 			await testToolCallWithoutResult(model);

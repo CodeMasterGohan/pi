@@ -338,7 +338,7 @@ async function multiTurn<TApi extends Api>(model: Model<TApi>, options?: StreamO
 
 describe("Generate E2E Tests", () => {
 	describe.skipIf(!process.env.GEMINI_API_KEY)("Gemini Provider (gemini-2.5-flash)", () => {
-		const llm = getModel("google", "gemini-2.5-flash");
+		const llm = getModel("openrouter", "google/gemini-2.5-flash");
 
 		it("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm);
@@ -371,7 +371,7 @@ describe("Generate E2E Tests", () => {
 		const vertexApiKey = process.env.GOOGLE_CLOUD_API_KEY;
 		const isVertexConfigured = Boolean(vertexProject && vertexLocation);
 		const vertexOptions = { project: vertexProject, location: vertexLocation } as const;
-		const llm = getModel("google-vertex", "gemini-3-flash-preview");
+		const llm = getModel("openrouter", "google/gemini-3-flash-preview");
 
 		it.skipIf(!isVertexConfigured)("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm, vertexOptions);

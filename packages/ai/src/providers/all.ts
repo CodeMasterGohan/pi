@@ -3,8 +3,6 @@ import { MODELS } from "../models.generated.ts";
 import { type CreateModelsOptions, createModels, type MutableModels, type Provider } from "../models.ts";
 import type { Api, Model } from "../types.ts";
 import modelDataManifest from "./data/.manifest.json" with { type: "json" };
-import { googleProvider } from "./google.ts";
-import { googleVertexProvider } from "./google-vertex.ts";
 import { huggingfaceProvider } from "./huggingface.ts";
 import { minimaxProvider } from "./minimax.ts";
 import { mistralProvider } from "./mistral.ts";
@@ -57,8 +55,6 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 /** All built-in providers, freshly constructed. */
 export function builtinProviders(): Provider[] {
 	return [
-		googleProvider(),
-		googleVertexProvider(),
 		huggingfaceProvider(),
 		minimaxProvider(),
 		mistralProvider(),

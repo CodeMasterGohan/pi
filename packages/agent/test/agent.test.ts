@@ -447,7 +447,7 @@ describe("Agent", () => {
 		expect(agent.state.systemPrompt).toBe("Custom prompt");
 
 		// Test setModel
-		const newModel = getModel("google", "gemini-2.5-flash");
+		const newModel = getModel("openrouter", "google/gemini-2.5-flash");
 		agent.state.model = newModel;
 		expect(agent.state.model).toBe(newModel);
 
