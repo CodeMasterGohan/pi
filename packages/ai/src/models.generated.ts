@@ -2,7 +2,6 @@
 // Do not edit manually - run 'npm run generate-models' to update
 
 import { MINIMAX_MODELS } from "./providers/minimax.models.ts";
-import { MISTRAL_MODELS } from "./providers/mistral.models.ts";
 import { MOONSHOTAI_MODELS } from "./providers/moonshotai.models.ts";
 import { NVIDIA_MODELS } from "./providers/nvidia.models.ts";
 import { OPENAI_MODELS } from "./providers/openai.models.ts";
@@ -13,7 +12,6 @@ import { ZAI_MODELS } from "./providers/zai.models.ts";
 
 export const MODELS: {
 		readonly "minimax": typeof MINIMAX_MODELS;
-	readonly "mistral": typeof MISTRAL_MODELS;
 	readonly "moonshotai": typeof MOONSHOTAI_MODELS;
 	readonly "nvidia": typeof NVIDIA_MODELS;
 	readonly "openai": typeof OPENAI_MODELS;
@@ -23,7 +21,6 @@ export const MODELS: {
 	readonly "zai": typeof ZAI_MODELS;
 } = {
 		"minimax": MINIMAX_MODELS,
-	"mistral": MISTRAL_MODELS,
 	"moonshotai": MOONSHOTAI_MODELS,
 	"nvidia": NVIDIA_MODELS,
 	"openai": OPENAI_MODELS,

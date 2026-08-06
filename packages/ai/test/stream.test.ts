@@ -669,7 +669,7 @@ describe("Generate E2E Tests", () => {
 	});
 
 	describe.skipIf(!process.env.MISTRAL_API_KEY)("Mistral Provider (devstral-medium-latest)", () => {
-		const llm = getModel("mistral", "devstral-medium-latest");
+		const llm = getModel("openrouter", "mistralai/mistral-small-3.2-24b-instruct");
 
 		it("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm);
@@ -684,18 +684,18 @@ describe("Generate E2E Tests", () => {
 		});
 
 		it("should handle thinking mode", { retry: 3 }, async () => {
-			const llm = getModel("mistral", "magistral-medium-latest");
+			const llm = getModel("openrouter", "mistralai/mistral-small-3.2-24b-instruct");
 			await handleThinking(llm, { promptMode: "reasoning" });
 		});
 
 		it("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			const llm = getModel("mistral", "magistral-medium-latest");
+			const llm = getModel("openrouter", "mistralai/mistral-small-3.2-24b-instruct");
 			await multiTurn(llm, { promptMode: "reasoning" });
 		});
 	});
 
 	describe.skipIf(!process.env.MISTRAL_API_KEY)("Mistral Provider (pixtral-12b with image support)", () => {
-		const llm = getModel("mistral", "pixtral-12b");
+		const llm = getModel("openrouter", "mistralai/mistral-small-3.2-24b-instruct");
 
 		it("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm);

@@ -33,7 +33,6 @@ export type KnownProvider =
 	| "openrouter"
 	| "vercel-ai-gateway"
 	| "zai"
-	| "mistral"
 	| "minimax"
 	| "moonshotai"
 	| "xiaomi";

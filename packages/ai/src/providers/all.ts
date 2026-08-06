@@ -4,7 +4,6 @@ import { type CreateModelsOptions, createModels, type MutableModels, type Provid
 import type { Api, Model } from "../types.ts";
 import modelDataManifest from "./data/.manifest.json" with { type: "json" };
 import { minimaxProvider } from "./minimax.ts";
-import { mistralProvider } from "./mistral.ts";
 import { moonshotaiProvider } from "./moonshotai.ts";
 import { nvidiaProvider } from "./nvidia.ts";
 import { openaiProvider } from "./openai.ts";
@@ -55,7 +54,6 @@ export function getBuiltinModels<TProvider extends BuiltinProvider>(
 export function builtinProviders(): Provider[] {
 	return [
 		minimaxProvider(),
-		mistralProvider(),
 		moonshotaiProvider(),
 		nvidiaProvider(),
 		openaiProvider(),
