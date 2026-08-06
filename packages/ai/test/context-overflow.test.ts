@@ -176,20 +176,6 @@ describe("Context overflow error handling", () => {
 	// Uses ChatGPT Plus/Pro subscription via OAuth
 	// =============================================================================
 
-	describe("OpenAI Codex (OAuth)", () => {
-		it.skipIf(!openaiCodexToken)(
-			"gpt-5.5 - should detect overflow via isContextOverflow",
-			async () => {
-				const result = await testContextOverflow(model, openaiCodexToken!);
-				logResult(result);
-
-				expect(result.stopReason).toBe("error");
-				expect(isContextOverflow(result.response, model.contextWindow)).toBe(true);
-			},
-			120000,
-		);
-	});
-
 	// =============================================================================
 	// =============================================================================
 

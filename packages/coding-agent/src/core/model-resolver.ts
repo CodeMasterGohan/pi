@@ -19,7 +19,6 @@ import type { ModelRuntime } from "./model-runtime.ts";
 /** Default model IDs for each known provider */
 export const defaultModelPerProvider: Record<KnownProvider, string> = {
 	openai: "gpt-5.5",
-	radius: "auto",
 	nvidia: "nvidia/nemotron-3-super-120b-a12b",
 	google: "gemini-3.1-pro-preview",
 	"google-vertex": "gemini-3.1-pro-preview",

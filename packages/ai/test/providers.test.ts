@@ -43,11 +43,10 @@ describe("builtin providers", () => {
 		const all = models.getModels();
 		expect(all.length).toBeGreaterThan(500);
 
-		// Static providers list models immediately; Radius is purely dynamic.
+		// Static providers list models immediately; all built-in providers are static.
 		for (const provider of providers) {
 			const list = models.getModels(provider.id);
-			if (provider.id === "radius") expect(list).toEqual([]);
-			else expect(list.length).toBeGreaterThan(0);
+			expect(list.length).toBeGreaterThan(0);
 			expect(list.every((m) => m.provider === provider.id)).toBe(true);
 		}
 	});

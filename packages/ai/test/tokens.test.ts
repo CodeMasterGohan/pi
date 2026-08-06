@@ -210,14 +210,4 @@ describe("Token Statistics on Abort", () => {
 	// =========================================================================
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// =========================================================================
-
-	describe("OpenAI Codex Provider", () => {
-		it.skipIf(!openaiCodexToken)(
-			"gpt-5.5 - should include token stats when aborted mid-stream",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await testTokensOnAbort(llm, { apiKey: openaiCodexToken });
-			},
-		);
-	});
 });

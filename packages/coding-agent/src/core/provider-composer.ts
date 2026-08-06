@@ -190,7 +190,7 @@ function applyModelsJson(
 
 	const models: Model<Api>[] = baseModels.map((model) => ({
 		...model,
-		baseUrl: config.oauth === "radius" ? model.baseUrl : (config.baseUrl ?? model.baseUrl),
+		baseUrl: config.baseUrl ?? model.baseUrl,
 		compat: mergeCompat(model.compat, config.compat),
 	}));
 	for (const definition of config.models ?? []) {

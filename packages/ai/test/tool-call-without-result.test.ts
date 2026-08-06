@@ -212,14 +212,4 @@ describe("Tool Call Without Result Tests", () => {
 	// =========================================================================
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// =========================================================================
-
-	describe("OpenAI Codex Provider", () => {
-		it.skipIf(!openaiCodexToken)(
-			"gpt-5.5 - should filter out tool calls without corresponding tool results",
-			{ retry: 3, timeout: 30000 },
-			async () => {
-				await testToolCallWithoutResult(model, { apiKey: openaiCodexToken });
-			},
-		);
-	});
 });

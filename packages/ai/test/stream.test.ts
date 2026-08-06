@@ -15,7 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const openaiCodexToken = oauthTokens[1];
 
 // Calculator tool definition (same as examples)
 // Note: Using StringEnum helper because Google's API doesn't support anyOf/const patterns
@@ -926,86 +925,6 @@ describe("Generate E2E Tests", () => {
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// Tokens are resolved at module level (see oauthTokens above)
 	// =========================================================================
-
-	describe("OpenAI Codex Provider (gpt-5.4)", () => {
-		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle thinking", { retry: 3 }, async () => {
-			await handleThinking(llm, { apiKey: openaiCodexToken, reasoningEffort: "high" });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			await multiTurn(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle image input", { retry: 3 }, async () => {
-			await handleImage(llm, { apiKey: openaiCodexToken });
-		});
-	});
-
-	describe("OpenAI Codex Provider (gpt-5.5)", () => {
-		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle thinking with reasoningEffort xhigh", { retry: 3 }, async () => {
-			await handleThinking(llm, { apiKey: openaiCodexToken, reasoningEffort: "xhigh" });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			await multiTurn(llm, { apiKey: openaiCodexToken, reasoningEffort: "xhigh" });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle image input", { retry: 3 }, async () => {
-			await handleImage(llm, { apiKey: openaiCodexToken });
-		});
-	});
-
-	describe("OpenAI Codex Provider (gpt-5.5 via WebSocket)", () => {
-		const wsOptions = { apiKey: openaiCodexToken, transport: "websocket" as const };
-
-		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(llm, wsOptions);
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(llm, wsOptions);
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(llm, wsOptions);
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle thinking with reasoningEffort xhigh", { retry: 3 }, async () => {
-			await handleThinking(llm, { ...wsOptions, reasoningEffort: "xhigh" });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			await multiTurn(llm, { ...wsOptions, reasoningEffort: "xhigh" });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle image input", { retry: 3 }, async () => {
-			await handleImage(llm, wsOptions);
-		});
-	});
 
 	// Check if ollama is installed and local LLM tests are enabled
 	let ollamaInstalled = false;

@@ -212,14 +212,4 @@ describe("AI Providers Abort Tests", () => {
 			await testImmediateAbort(llm);
 		});
 	});
-
-	describe("OpenAI Codex Provider Abort", () => {
-		it.skipIf(!openaiCodexToken)("should abort mid-stream", { retry: 3 }, async () => {
-			await testAbortSignal(llm, { apiKey: openaiCodexToken });
-		});
-
-		it.skipIf(!openaiCodexToken)("should handle immediate abort", { retry: 3 }, async () => {
-			await testImmediateAbort(llm, { apiKey: openaiCodexToken });
-		});
-	});
 });

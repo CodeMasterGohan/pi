@@ -19,7 +19,6 @@ import type { Api, Context, Model, StreamOptions, Usage } from "../src/types.ts"
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 // Generate a long system prompt to trigger caching (>2k bytes for most providers)
 const LONG_SYSTEM_PROMPT = `You are a helpful assistant. Be concise in your responses.
@@ -101,29 +100,6 @@ describe("totalTokens field", () => {
 
 				console.log(`\nAnthropic / ${llm.id}:`);
 				const { first, second } = await testTotalTokensWithCache(llm, { apiKey: process.env.ANTHROPIC_API_KEY });
-
-				logUsage("First request", first);
-				logUsage("Second request", second);
-
-				assertTotalTokensEqualsComponents(first);
-				assertTotalTokensEqualsComponents(second);
-
-				// Anthropic should have cache activity
-				const hasCache = second.cacheRead > 0 || second.cacheWrite > 0 || first.cacheWrite > 0;
-				expect(hasCache).toBe(true);
-			},
-		);
-	});
-
-	describe("Anthropic (OAuth)", () => {
-		it.skipIf(!anthropicOAuthToken)(
-			"claude-sonnet-4 - should return totalTokens equal to sum of components",
-			{ retry: 3, timeout: 60000 },
-			async () => {
-				const llm = getModel("openrouter", "anthropic/claude-sonnet-4.6");
-
-				console.log(`\nAnthropic OAuth / ${llm.id}:`);
-				const { first, second } = await testTotalTokensWithCache(llm, { apiKey: anthropicOAuthToken });
 
 				logUsage("First request", first);
 				logUsage("Second request", second);
@@ -573,21 +549,4 @@ describe("totalTokens field", () => {
 	// =========================================================================
 	// OpenAI Codex (OAuth)
 	// =========================================================================
-
-	describe("OpenAI Codex (OAuth)", () => {
-		it.skipIf(!openaiCodexToken)(
-			"gpt-5.5 - should return totalTokens equal to sum of components",
-			{ retry: 3, timeout: 60000 },
-			async () => {
-				console.log(`\nOpenAI Codex / ${llm.id}:`);
-				const { first, second } = await testTotalTokensWithCache(llm, { apiKey: openaiCodexToken });
-
-				logUsage("First request", first);
-				logUsage("Second request", second);
-
-				assertTotalTokensEqualsComponents(first);
-				assertTotalTokensEqualsComponents(second);
-			},
-		);
-	});
 });

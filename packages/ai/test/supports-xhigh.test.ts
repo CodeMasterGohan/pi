@@ -52,8 +52,6 @@ describe("getSupportedThinkingLevels", () => {
 		expect(getSupportedThinkingLevels(model!)).not.toContain("max");
 	});
 
-	it.each(["gpt-5.4", "gpt-5.5", "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] as const)();
-
 	it.each(["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] as const)(
 		"includes xhigh and max for OpenAI %s models",
 		(modelId) => {

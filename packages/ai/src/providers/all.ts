@@ -19,7 +19,6 @@ import { openrouterProvider } from "./openrouter.ts";
 import { openrouterImagesProvider } from "./openrouter-images.ts";
 import { qwenTokenPlanProvider } from "./qwen-token-plan.ts";
 import { qwenTokenPlanCnProvider } from "./qwen-token-plan-cn.ts";
-import { radiusProvider } from "./radius.ts";
 import { vercelAIGatewayProvider } from "./vercel-ai-gateway.ts";
 import { xiaomiProvider } from "./xiaomi.ts";
 import { xiaomiTokenPlanAmsProvider } from "./xiaomi-token-plan-ams.ts";
@@ -28,10 +27,7 @@ import { xiaomiTokenPlanSgpProvider } from "./xiaomi-token-plan-sgp.ts";
 import { zaiProvider } from "./zai.ts";
 import { zaiCodingCnProvider } from "./zai-coding-cn.ts";
 
-export { radiusProvider };
-
 /** Providers present in the generated catalog. `KnownProvider` additionally
- * includes purely dynamic providers (e.g. "radius") that have no static
  * catalog entry. */
 export type BuiltinProvider = keyof typeof MODELS;
 
@@ -86,7 +82,6 @@ export function builtinProviders(): Provider[] {
 		openrouterProvider(),
 		qwenTokenPlanProvider(),
 		qwenTokenPlanCnProvider(),
-		radiusProvider(),
 		vercelAIGatewayProvider(),
 		xiaomiProvider(),
 		xiaomiTokenPlanAmsProvider(),
