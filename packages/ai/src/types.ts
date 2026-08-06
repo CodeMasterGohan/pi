@@ -48,7 +48,6 @@ export type KnownProvider =
 	| "huggingface"
 	| "opencode"
 	| "opencode-go"
-	| "kimi-coding"
 	| "qwen-token-plan"
 	| "qwen-token-plan-cn"
 	| "xiaomi"

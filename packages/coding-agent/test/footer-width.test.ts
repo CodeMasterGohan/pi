@@ -209,7 +209,6 @@ describe("FooterComponent width handling", () => {
 	it("marks Kimi Coding costs as subscription estimates", () => {
 		const session = createSession({
 			sessionName: "",
-			provider: "kimi-coding",
 			usage: {
 				input: 100,
 				output: 10,

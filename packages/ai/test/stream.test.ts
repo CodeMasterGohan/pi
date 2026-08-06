@@ -18,7 +18,7 @@ const __dirname = dirname(__filename);
 
 // Resolve OAuth tokens at module level (async, runs before tests)
 const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
-const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
+const openaiCodexToken = oauthTokens[1];
 
 // Calculator tool definition (same as examples)
 // Note: Using StringEnum helper because Google's API doesn't support anyOf/const patterns
@@ -742,33 +742,6 @@ describe("Generate E2E Tests", () => {
 		});
 	});
 
-	describe.skipIf(!process.env.KIMI_API_KEY)(
-		"Kimi For Coding Provider (kimi-for-coding via Anthropic Messages)",
-		() => {
-			const llm = getModel("kimi-coding", "kimi-for-coding");
-
-			it("should complete basic text generation", { retry: 3 }, async () => {
-				await basicTextGeneration(llm);
-			});
-
-			it("should handle tool calling", { retry: 3 }, async () => {
-				await handleToolCall(llm);
-			});
-
-			it("should handle streaming", { retry: 3 }, async () => {
-				await handleStreaming(llm);
-			});
-
-			it("should handle thinking mode", { retry: 3 }, async () => {
-				await handleThinking(llm, { thinkingEnabled: true, thinkingBudgetTokens: 2048 });
-			});
-
-			it("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-				await multiTurn(llm, { thinkingEnabled: true, thinkingBudgetTokens: 2048 });
-			});
-		},
-	);
-
 	describe.skipIf(!process.env.XIAOMI_API_KEY)(
 		"Xiaomi MiMo (API billing) Provider (Xiaomi MiMo-V2.5-Pro via Anthropic Messages)",
 		() => {
@@ -956,70 +929,6 @@ describe("Generate E2E Tests", () => {
 	// OAuth-based providers (credentials from ~/.pi/agent/oauth.json)
 	// Tokens are resolved at module level (see oauthTokens above)
 	// =========================================================================
-
-	describe("Anthropic OAuth Provider (claude-sonnet-4-6)", () => {
-		const model = getModel("openrouter", "anthropic/claude-sonnet-4.6");
-
-		it.skipIf(!anthropicOAuthToken)("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle thinking", { retry: 3 }, async () => {
-			await handleThinking(model, { apiKey: anthropicOAuthToken, thinkingEnabled: true });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle multi-turn with thinking and tools", { retry: 3 }, async () => {
-			await multiTurn(model, { apiKey: anthropicOAuthToken, thinkingEnabled: true });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle image input", { retry: 3 }, async () => {
-			await handleImage(model, { apiKey: anthropicOAuthToken });
-		});
-	});
-
-	describe("Anthropic OAuth Provider (claude-opus-4-6 with adaptive thinking)", () => {
-		const model = getModel("openrouter", "anthropic/claude-opus-4.6");
-
-		it.skipIf(!anthropicOAuthToken)("should complete basic text generation", { retry: 3 }, async () => {
-			await basicTextGeneration(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle tool calling", { retry: 3 }, async () => {
-			await handleToolCall(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle streaming", { retry: 3 }, async () => {
-			await handleStreaming(model, { apiKey: anthropicOAuthToken });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle adaptive thinking with effort high", { retry: 3 }, async () => {
-			await handleThinking(model, { apiKey: anthropicOAuthToken, thinkingEnabled: true, effort: "high" });
-		});
-
-		it.skipIf(!anthropicOAuthToken)("should handle adaptive thinking with effort medium", { retry: 3 }, async () => {
-			await handleThinking(model, { apiKey: anthropicOAuthToken, thinkingEnabled: true, effort: "medium" });
-		});
-
-		it.skipIf(!anthropicOAuthToken)(
-			"should handle multi-turn with adaptive thinking and tools",
-			{ retry: 3 },
-			async () => {
-				await multiTurn(model, { apiKey: anthropicOAuthToken, thinkingEnabled: true, effort: "high" });
-			},
-		);
-
-		it.skipIf(!anthropicOAuthToken)("should handle image input", { retry: 3 }, async () => {
-			await handleImage(model, { apiKey: anthropicOAuthToken });
-		});
-	});
 
 	describe("OpenAI Codex Provider (gpt-5.4)", () => {
 		const llm = getModel("openai-codex", "gpt-5.4");

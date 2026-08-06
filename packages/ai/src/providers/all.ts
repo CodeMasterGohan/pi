@@ -6,7 +6,6 @@ import modelDataManifest from "./data/.manifest.json" with { type: "json" };
 import { googleProvider } from "./google.ts";
 import { googleVertexProvider } from "./google-vertex.ts";
 import { huggingfaceProvider } from "./huggingface.ts";
-import { kimiCodingProvider } from "./kimi-coding.ts";
 import { minimaxProvider } from "./minimax.ts";
 import { minimaxCnProvider } from "./minimax-cn.ts";
 import { mistralProvider } from "./mistral.ts";
@@ -76,7 +75,6 @@ export function builtinProviders(): Provider[] {
 		googleProvider(),
 		googleVertexProvider(),
 		huggingfaceProvider(),
-		kimiCodingProvider(),
 		minimaxProvider(),
 		minimaxCnProvider(),
 		mistralProvider(),

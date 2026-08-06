@@ -18,22 +18,22 @@ This document outlines the detailed step-by-step plan for removing all unused AI
 - Modify [`builtinProviders`](file:///workspace/packages/ai/src/providers/all.ts#L88) to return only `[openrouterProvider()]`.
 - Modify `builtinImagesProviders` to return `[openrouterImagesProvider()]`.
 - Remove imports and instantiations for:
-  - `amazonBedrockProvider`
-  - `antLingProvider`
-  - `anthropicProvider`
-  - `azureOpenAIResponsesProvider`
-  - `basetenProvider`
-  - `cerebrasProvider`
-  - `cloudflareAIGatewayProvider`
-  - `cloudflareWorkersAIProvider`
-  - `deepseekProvider`
-  - `fireworksProvider`
+  - `amazonBedrockProvider` — ~~removed~~
+  - `antLingProvider` — ~~removed~~
+  - `anthropicProvider` — ~~removed~~
+  - `azureOpenAIResponsesProvider` — ~~removed~~
+  - `basetenProvider` — ~~removed~~
+  - `cerebrasProvider` — ~~removed~~
+  - `cloudflareAIGatewayProvider` — ~~removed~~
+  - `cloudflareWorkersAIProvider` — ~~removed~~
+  - `deepseekProvider` — ~~removed~~
+  - `fireworksProvider` — ~~removed~~
   - `githubCopilotProvider`
   - `googleProvider`
   - `googleVertexProvider`
-  - `groqProvider`
+  - `groqProvider` — ~~removed~~
   - `huggingfaceProvider`
-  - `kimiCodingProvider`
+  - `kimiCodingProvider` — ~~removed~~
   - `minimaxProvider`, `minimaxCnProvider`
   - `mistralProvider`
   - `moonshotaiProvider`, `moonshotaiCnProvider`
@@ -42,30 +42,30 @@ This document outlines the detailed step-by-step plan for removing all unused AI
   - `opencodeProvider`, `opencodeGoProvider`
   - `qwenTokenPlanProvider`, `qwenTokenPlanCnProvider`
   - `radiusProvider`
-  - `togetherProvider`
+  - `togetherProvider` — ~~removed~~
   - `vercelAIGatewayProvider`
-  - `xaiProvider`
+  - `xaiProvider` — ~~removed~~
   - `xiaomiProvider`, `xiaomiTokenPlanAmsProvider`, `xiaomiTokenPlanCnProvider`, `xiaomiTokenPlanSgpProvider`
   - `zaiProvider`, `zaiCodingCnProvider`
 
 ### B. Provider Source Files to Delete ([`packages/ai/src/providers/`](file:///workspace/packages/ai/src/providers/))
 - Remove all non-OpenRouter provider files:
-  - `amazon-bedrock.ts`, `amazon-bedrock.models.ts`
-  - `ant-ling.ts`, `ant-ling.models.ts`
-  - `anthropic.ts`, `anthropic.models.ts`
-  - `azure-openai-responses.ts`, `azure-openai-responses.models.ts`
-  - `baseten.ts`, `baseten.models.ts`
-  - `cerebras.ts`, `cerebras.models.ts`
-  - `cloudflare-ai-gateway.ts`, `cloudflare-ai-gateway.models.ts`
-  - `cloudflare-workers-ai.ts`, `cloudflare-workers-ai.models.ts`
-  - `deepseek.ts`, `deepseek.models.ts`
-  - `fireworks.ts`, `fireworks.models.ts`
+  - `amazon-bedrock.ts`, `amazon-bedrock.models.ts` — ~~deleted~~
+  - `ant-ling.ts`, `ant-ling.models.ts` — ~~deleted~~
+  - `anthropic.ts`, `anthropic.models.ts` — ~~deleted~~
+  - `azure-openai-responses.ts`, `azure-openai-responses.models.ts` — ~~deleted~~
+  - `baseten.ts`, `baseten.models.ts` — ~~deleted~~
+  - `cerebras.ts`, `cerebras.models.ts` — ~~deleted~~
+  - `cloudflare-ai-gateway.ts`, `cloudflare-ai-gateway.models.ts` — ~~deleted~~
+  - `cloudflare-workers-ai.ts`, `cloudflare-workers-ai.models.ts` — ~~deleted~~
+  - `deepseek.ts`, `deepseek.models.ts` — ~~deleted~~
+  - `fireworks.ts`, `fireworks.models.ts` — ~~deleted~~
   - `github-copilot.ts`, `github-copilot.models.ts`
   - `google.ts`, `google.models.ts`
   - `google-vertex.ts`, `google-vertex.models.ts`
-  - `groq.ts`, `groq.models.ts`
+  - `groq.ts`, `groq.models.ts` — ~~deleted~~
   - `huggingface.ts`, `huggingface.models.ts`
-  - `kimi-coding.ts`, `kimi-coding.models.ts`
+  - `kimi-coding.ts`, `kimi-coding.models.ts` — ~~deleted~~
   - `minimax.ts`, `minimax.models.ts`, `minimax-cn.ts`, `minimax-cn.models.ts`
   - `mistral.ts`, `mistral.models.ts`
   - `moonshotai.ts`, `moonshotai.models.ts`, `moonshotai-cn.ts`, `moonshotai-cn.models.ts`
@@ -73,11 +73,14 @@ This document outlines the detailed step-by-step plan for removing all unused AI
   - `openai.ts`, `openai.models.ts`, `openai-codex.ts`, `openai-codex.models.ts`
   - `opencode.ts`, `opencode.models.ts`, `opencode-go.ts`, `opencode-go.models.ts`
   - `qwen-token-plan.ts`, `qwen-token-plan.models.ts`, `qwen-token-plan-cn.ts`, `qwen-token-plan-cn.models.ts`
-  - `together.ts`, `together.models.ts`
+  - `together.ts`, `together.models.ts` — ~~deleted~~
   - `vercel-ai-gateway.ts`, `vercel-ai-gateway.models.ts`
-  - `xai.ts`, `xai.models.ts`
+  - `xai.ts`, `xai.models.ts` — ~~deleted~~
   - `xiaomi.ts`, `xiaomi.models.ts`, `xiaomi-token-plan-ams.ts`, `xiaomi-token-plan-ams.models.ts`, `xiaomi-token-plan-cn.ts`, `xiaomi-token-plan-cn.models.ts`, `xiaomi-token-plan-sgp.ts`, `xiaomi-token-plan-sgp.models.ts`
   - `zai.ts`, `zai.models.ts`, `zai-coding-cn.ts`, `zai-coding-cn.models.ts`
+
+~~Also removed (staged for deletion in working tree):~~
+~~- `kimi-coding.ts`, `kimi-coding.models.ts`~~
 
 ### C. Static Model Catalog Generation ([`packages/ai/scripts/generate-models.ts`](file:///workspace/packages/ai/scripts/generate-models.ts))
 - Update [`generate-models.ts`](file:///workspace/packages/ai/scripts/generate-models.ts) to restrict model generation output strictly to `openrouter` entries.

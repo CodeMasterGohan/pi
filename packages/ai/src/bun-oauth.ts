@@ -1,4 +1,3 @@
-import { kimiCodingOAuth } from "./auth/oauth/kimi-coding.ts";
 import { registerBundledOAuthFlowLoaders } from "./auth/oauth/load.ts";
 import { openaiCodexOAuth } from "./auth/oauth/openai-codex.ts";
 import { openRouterOAuth } from "./auth/oauth/openrouter.ts";
@@ -10,7 +9,6 @@ export function registerBunOAuthFlows(): void {
 		openaiCodex: () => openaiCodexOAuth,
 
 		openrouter: () => openRouterOAuth,
-		kimiCoding: () => kimiCodingOAuth,
 		radius: createRadiusOAuth,
 	});
 }

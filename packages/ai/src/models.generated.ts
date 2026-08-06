@@ -4,7 +4,6 @@
 import { GOOGLE_MODELS } from "./providers/google.models.ts";
 import { GOOGLE_VERTEX_MODELS } from "./providers/google-vertex.models.ts";
 import { HUGGINGFACE_MODELS } from "./providers/huggingface.models.ts";
-import { KIMI_CODING_MODELS } from "./providers/kimi-coding.models.ts";
 import { MINIMAX_MODELS } from "./providers/minimax.models.ts";
 import { MINIMAX_CN_MODELS } from "./providers/minimax-cn.models.ts";
 import { MISTRAL_MODELS } from "./providers/mistral.models.ts";
@@ -30,8 +29,7 @@ export const MODELS: {
 		readonly "google": typeof GOOGLE_MODELS;
 	readonly "google-vertex": typeof GOOGLE_VERTEX_MODELS;
 	readonly "huggingface": typeof HUGGINGFACE_MODELS;
-	readonly "kimi-coding": typeof KIMI_CODING_MODELS;
-	readonly "minimax": typeof MINIMAX_MODELS;
+		readonly "minimax": typeof MINIMAX_MODELS;
 	readonly "minimax-cn": typeof MINIMAX_CN_MODELS;
 	readonly "mistral": typeof MISTRAL_MODELS;
 	readonly "moonshotai": typeof MOONSHOTAI_MODELS;
@@ -55,8 +53,7 @@ export const MODELS: {
 		"google": GOOGLE_MODELS,
 	"google-vertex": GOOGLE_VERTEX_MODELS,
 	"huggingface": HUGGINGFACE_MODELS,
-	"kimi-coding": KIMI_CODING_MODELS,
-	"minimax": MINIMAX_MODELS,
+		"minimax": MINIMAX_MODELS,
 	"minimax-cn": MINIMAX_CN_MODELS,
 	"mistral": MISTRAL_MODELS,
 	"moonshotai": MOONSHOTAI_MODELS,

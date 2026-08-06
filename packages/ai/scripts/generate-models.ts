@@ -1367,8 +1367,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 					id: normalizedId,
 					name: normalizedName,
 					api: "anthropic-messages",
-					provider: "kimi-coding",
-					// Kimi For Coding's Anthropic-compatible API - SDK appends /v1/messages
+										// Kimi For Coding's Anthropic-compatible API - SDK appends /v1/messages
 					baseUrl: "https://api.kimi.com/coding",
 					headers: { ...KIMI_STATIC_HEADERS },
 					compat: {
@@ -1386,8 +1385,7 @@ async function loadModelsDevData(): Promise<Model<any>[]> {
 					contextWindow: m.limit?.context || 4096,
 					maxTokens: m.limit?.output || 4096,
 				});
-				recordModelsDevReasoningOptions("kimi-coding", normalizedId, m);
-			}
+							}
 		}
 
 		// Process Moonshot AI models
