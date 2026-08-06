@@ -44,7 +44,6 @@ export type KnownProvider =
 	| "moonshotai"
 	| "moonshotai-cn"
 	| "huggingface"
-	| "opencode"
 	| "opencode-go"
 	| "xiaomi"
 	| "xiaomi-token-plan-cn"
