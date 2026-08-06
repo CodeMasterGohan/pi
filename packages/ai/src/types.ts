@@ -45,8 +45,7 @@ export type KnownProvider =
 	| "moonshotai-cn"
 	| "huggingface"
 	| "opencode-go"
-	| "xiaomi"
-	| "xiaomi-token-plan-sgp";
+	| "xiaomi";
 export type ProviderId = KnownProvider | string;
 
 export type KnownImagesProvider = "openrouter";

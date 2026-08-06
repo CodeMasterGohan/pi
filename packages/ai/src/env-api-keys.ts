@@ -82,7 +82,6 @@ function getApiKeyEnvVars(provider: string): readonly string[] | undefined {
 		"moonshotai-cn": "MOONSHOT_API_KEY",
 		huggingface: "HF_TOKEN",
 		xiaomi: "XIAOMI_API_KEY",
-		"xiaomi-token-plan-sgp": "XIAOMI_TOKEN_PLAN_SGP_API_KEY",
 	};
 
 	const envVar = envMap[provider];
