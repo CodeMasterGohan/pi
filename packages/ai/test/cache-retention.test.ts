@@ -3,7 +3,6 @@ import { stream as streamAnthropic } from "../src/api/anthropic-messages.ts";
 import { stream as streamOpenAICompletions } from "../src/api/openai-completions.ts";
 import { stream as streamOpenAIResponses } from "../src/api/openai-responses.ts";
 import { getModel, stream } from "../src/compat.ts";
-import { MODELS } from "../src/models.generated.ts";
 import type { Context, Model } from "../src/types.ts";
 
 class PayloadCaptured extends Error {
@@ -474,7 +473,5 @@ describe("Cache Retention (PI_CACHE_RETENTION)", () => {
 			expect(capturedPayload.prompt_cache_key).toBeUndefined();
 			expect(capturedPayload.prompt_cache_retention).toBeUndefined();
 		});
-
-
 	});
 });
