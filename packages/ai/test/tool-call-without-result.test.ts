@@ -5,10 +5,7 @@ import type { Api, Context, Model, StreamOptions, Tool } from "../src/types.ts";
 
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
-import { resolveApiKey } from "./oauth.ts";
-
 // Resolve OAuth tokens at module level (async, runs before tests)
-const openaiCodexToken = await resolveApiKey("openai-codex");
 
 // Simple calculate tool
 const calculateSchema = Type.Object({
@@ -221,7 +218,6 @@ describe("Tool Call Without Result Tests", () => {
 			"gpt-5.5 - should filter out tool calls without corresponding tool results",
 			{ retry: 3, timeout: 30000 },
 			async () => {
-				const model = getModel("openai-codex", "gpt-5.5");
 				await testToolCallWithoutResult(model, { apiKey: openaiCodexToken });
 			},
 		);

@@ -426,11 +426,9 @@ describe("resolveCliModel", () => {
 			...mockModels[1],
 			id: "gpt-5.6-sol",
 			name: "GPT 5.6 Sol",
-			provider: "openai-codex",
 		};
 		const registry = {
 			getModels: () => [azureModel, codexModel],
-			hasConfiguredAuth: (provider: string) => provider === "openai-codex",
 		} as unknown as Parameters<typeof resolveCliModel>[0]["modelRuntime"];
 
 		const result = resolveCliModel({
@@ -439,7 +437,6 @@ describe("resolveCliModel", () => {
 		});
 
 		expect(result.error).toBeUndefined();
-		expect(result.model?.provider).toBe("openai-codex");
 		expect(result.model?.id).toBe("gpt-5.6-sol");
 	});
 
@@ -454,7 +451,6 @@ describe("resolveCliModel", () => {
 			...mockModels[1],
 			id: "gpt-5.6-sol",
 			name: "GPT 5.6 Sol",
-			provider: "openai-codex",
 		};
 		const registry = {
 			getModels: () => [azureModel, codexModel],
@@ -469,7 +465,6 @@ describe("resolveCliModel", () => {
 		expect(result.model).toBeUndefined();
 		expect(result.error).toContain('Model "gpt-5.6-sol" is ambiguous across providers');
 		expect(result.error).toContain("azure-openai-responses/gpt-5.6-sol");
-		expect(result.error).toContain("openai-codex/gpt-5.6-sol");
 		expect(result.error).toContain("Use --provider or provider/model");
 	});
 
@@ -696,7 +691,6 @@ describe("resolveCliModel", () => {
 describe("default model selection", () => {
 	test("openai defaults track current models", () => {
 		expect(defaultModelPerProvider.openai).toBe("gpt-5.5");
-		expect(defaultModelPerProvider["openai-codex"]).toBe("gpt-5.5");
 	});
 
 	test("zai and minimax defaults track current models", () => {

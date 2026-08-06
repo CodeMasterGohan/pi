@@ -351,8 +351,7 @@ function supportsDirectReasoningEffort(model: Model<Api>): boolean {
 	if (
 		model.api === "openai-responses" ||
 		model.api === "azure-openai-responses" ||
-		model.api === "openai-codex-responses"
-	) {
+			) {
 		return true;
 	}
 	if (model.api !== "openai-completions") return false;
@@ -388,8 +387,7 @@ function supportsOpenAiMax(model: Model<Api>): boolean {
 		model.id.includes("gpt-5.6") &&
 		(model.api === "openai-responses" ||
 			model.api === "azure-openai-responses" ||
-			model.api === "openai-codex-responses" ||
-			model.api === "openai-completions")
+						model.api === "openai-completions")
 	);
 }
 
@@ -577,8 +575,7 @@ function applyStrictToolCompatMetadata(model: Model<Api>): void {
 // for pre-GPT-5 models (gpt-4.x, gpt-4o, o-series).
 const OPENAI_GRAMMAR_TOOL_PROVIDERS = new Set([
 	"openai",
-	"openai-codex",
-	"azure-openai-responses",
+		"azure-openai-responses",
 
 	"opencode",
 	"cloudflare-ai-gateway",
@@ -586,8 +583,7 @@ const OPENAI_GRAMMAR_TOOL_PROVIDERS = new Set([
 const OPENAI_GRAMMAR_TOOL_APIS = new Set<Api>([
 	"openai-responses",
 	"azure-openai-responses",
-	"openai-codex-responses",
-]);
+	]);
 
 function applyOpenAIGrammarToolCompatMetadata(model: Model<Api>): void {
 	if (!OPENAI_GRAMMAR_TOOL_APIS.has(model.api) || !OPENAI_GRAMMAR_TOOL_PROVIDERS.has(model.provider)) return;
@@ -598,8 +594,7 @@ function applyOpenAIGrammarToolCompatMetadata(model: Model<Api>): void {
 
 function applyOpenAIToolSearchMetadata(model: Model<Api>): void {
 	const isOpenAIResponses = model.provider === "openai" && model.api === "openai-responses";
-	const isOpenAICodex = model.provider === "openai-codex" && model.api === "openai-codex-responses";
-	if (!(isOpenAIResponses || isOpenAICodex) || !OPENAI_TOOL_SEARCH_MODEL_IDS.has(model.id)) return;
+		if (!isOpenAIResponses || !OPENAI_TOOL_SEARCH_MODEL_IDS.has(model.id)) return;
 	model.compat = {
 		...(model.compat as OpenAIResponsesCompat | undefined),
 		supportsToolSearch: true,
@@ -1776,18 +1771,11 @@ async function generateModels() {
 	// OpenAI Codex (ChatGPT OAuth) models
 	// NOTE: These are not fetched from models.dev; we keep a small, explicit list to avoid aliases.
 	// Older model limits are based on observed server behavior; GPT-5.6 follows Codex's 272k catalog limit (formerly 372k).
-	const CODEX_BASE_URL = "https://chatgpt.com/backend-api";
-	const CODEX_CONTEXT = 272000;
-	const CODEX_GPT_56_CONTEXT = 272000;
-	const CODEX_SPARK_CONTEXT = 128000;
-	const CODEX_MAX_TOKENS = 128000;
-	const codexModels: Model<"openai-codex-responses">[] = [
+						const codexModels: Model<"openai-codex-responses">[] = [
 		{
 			id: "gpt-5.3-codex-spark",
 			name: "GPT-5.3 Codex Spark",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text"],
 			cost: { input: 1.75, output: 14, cacheRead: 0.175, cacheWrite: 0 },
@@ -1797,9 +1785,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.4",
 			name: "GPT-5.4",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: withOpenAiLongContextPricing({ input: 2.5, output: 15, cacheRead: 0.25, cacheWrite: 0 }),
@@ -1809,9 +1795,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.4-mini",
 			name: "GPT-5.4 mini",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: { input: 0.75, output: 4.5, cacheRead: 0.075, cacheWrite: 0 },
@@ -1821,9 +1805,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.5",
 			name: "GPT-5.5",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: withOpenAiLongContextPricing({ input: 5, output: 30, cacheRead: 0.5, cacheWrite: 0 }),
@@ -1833,9 +1815,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.6-luna",
 			name: "GPT-5.6 Luna",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: withOpenAiLongContextPricing(OPENAI_GPT_56_STANDARD_COSTS["gpt-5.6-luna"]),
@@ -1845,9 +1825,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.6-sol",
 			name: "GPT-5.6 Sol",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: withOpenAiLongContextPricing({ input: 5, output: 30, cacheRead: 0.5, cacheWrite: 6.25 }),
@@ -1857,9 +1835,7 @@ async function generateModels() {
 		{
 			id: "gpt-5.6-terra",
 			name: "GPT-5.6 Terra",
-			api: "openai-codex-responses",
-			provider: "openai-codex",
-			baseUrl: CODEX_BASE_URL,
+			api: 			provider: 			baseUrl: CODEX_BASE_URL,
 			reasoning: true,
 			input: ["text", "image"],
 			cost: withOpenAiLongContextPricing(OPENAI_GPT_56_STANDARD_COSTS["gpt-5.6-terra"]),

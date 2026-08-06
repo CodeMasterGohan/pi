@@ -5,13 +5,10 @@ import type { Api, Context, Model, StreamOptions, ToolResultMessage } from "../s
 
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
-import { resolveApiKey } from "./oauth.ts";
-
 // Empty schema for test tools - must be proper OBJECT type for Cloud Code Assist
 const emptySchema = Type.Object({});
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 /**
@@ -570,7 +567,6 @@ describe("AI Providers Unicode Surrogate Pair Tests", () => {
 			"gpt-5.5 - should handle emoji in tool results",
 			{ retry: 3, timeout: 30000 },
 			async () => {
-				const llm = getModel("openai-codex", "gpt-5.5");
 				await testEmojiInToolResults(llm, { apiKey: openaiCodexToken });
 			},
 		);
@@ -579,7 +575,6 @@ describe("AI Providers Unicode Surrogate Pair Tests", () => {
 			"gpt-5.5 - should handle real-world LinkedIn comment data with emoji",
 			{ retry: 3, timeout: 30000 },
 			async () => {
-				const llm = getModel("openai-codex", "gpt-5.5");
 				await testRealWorldLinkedInData(llm, { apiKey: openaiCodexToken });
 			},
 		);
@@ -588,7 +583,6 @@ describe("AI Providers Unicode Surrogate Pair Tests", () => {
 			"gpt-5.5 - should handle unpaired high surrogate (0xD83D) in tool results",
 			{ retry: 3, timeout: 30000 },
 			async () => {
-				const llm = getModel("openai-codex", "gpt-5.5");
 				await testUnpairedHighSurrogate(llm, { apiKey: openaiCodexToken });
 			},
 		);

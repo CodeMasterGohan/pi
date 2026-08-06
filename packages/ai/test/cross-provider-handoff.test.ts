@@ -65,7 +65,6 @@ const PROVIDER_MODEL_PAIRS: ProviderModelPair[] = [
 	{ provider: "openai", model: "gpt-5-mini", label: "openai-responses-gpt-5-mini" },
 	{ provider: "azure-openai-responses", model: "gpt-4o-mini", label: "azure-openai-responses-gpt-4o-mini" },
 	// OpenAI Codex
-	{ provider: "openai-codex", model: "gpt-5.5", label: "openai-codex-gpt-5.5" },
 
 	// xAI	// Cerebras
 	{ provider: "cerebras", model: "zai-glm-4.7", label: "cerebras-zai-glm-4.7" },

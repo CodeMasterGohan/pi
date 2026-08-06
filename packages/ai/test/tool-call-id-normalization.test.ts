@@ -1,7 +1,6 @@
 /**
  * Tool Call ID Normalization Tests
  *
- * Tests that tool call IDs from OpenAI Responses API (openai-codex, opencode)
  * are properly normalized when sent to other providers.
  *
  * OpenAI Responses API generates IDs in format: {call_id}|{id}
@@ -14,11 +13,9 @@ import { Type } from "typebox";
 import { describe, expect, it } from "vitest";
 import { completeSimple, getEnvApiKey, getModel } from "../src/compat.ts";
 import type { AssistantMessage, Message, Tool, ToolResultMessage } from "../src/types.ts";
-import { resolveApiKey } from "./oauth.ts";
 
 // Resolve API keys
 const openrouterKey = getEnvApiKey("openrouter");
-const codexToken = await resolveApiKey("openai-codex");
 
 // Simple echo tool for testing
 const echoToolSchema = Type.Object({
@@ -34,81 +31,71 @@ const echoTool: Tool<typeof echoToolSchema> = {
 /**
  * Test 1: Live cross-provider handoff
  *
- * 1. Use openai-codex gpt-5.3-codex-spark to generate a tool call
  * 2. Switch to openrouter openai/gpt-5.4 and complete
  *
  * Should succeed without "call_id too long" errors.
  */
 describe("Tool Call ID Normalization - Live Handoff", () => {
-	it.skipIf(!codexToken || !openrouterKey)(
-		"openai-codex -> openrouter should normalize pipe-separated IDs",
-		async () => {
-			const codexModel = getModel("openai-codex", "gpt-5.3-codex-spark");
-			const openrouterModel = getModel("openrouter", "openai/gpt-5.4");
+	it.skipIf(!codexToken || !openrouterKey)(async () => {
+		const openrouterModel = getModel("openrouter", "openai/gpt-5.4");
 
-			// Step 1: Generate tool call with openai-codex
-			const userMessage: Message = {
-				role: "user",
-				content: "Use the echo tool to echo 'hello world'",
-				timestamp: Date.now(),
-			};
+		const userMessage: Message = {
+			role: "user",
+			content: "Use the echo tool to echo 'hello world'",
+			timestamp: Date.now(),
+		};
 
-			const assistantResponse = await completeSimple(
-				codexModel,
-				{
-					systemPrompt: "You are a helpful assistant. Use the echo tool when asked.",
-					messages: [userMessage],
-					tools: [echoTool],
-				},
-				{ apiKey: codexToken },
-			);
+		const assistantResponse = await completeSimple(
+			codexModel,
+			{
+				systemPrompt: "You are a helpful assistant. Use the echo tool when asked.",
+				messages: [userMessage],
+				tools: [echoTool],
+			},
+			{ apiKey: codexToken },
+		);
 
-			expect(assistantResponse.stopReason, `Codex error: ${assistantResponse.errorMessage}`).toBe("toolUse");
+		expect(assistantResponse.stopReason, `Codex error: ${assistantResponse.errorMessage}`).toBe("toolUse");
 
-			const toolCall = assistantResponse.content.find((c) => c.type === "toolCall");
-			expect(toolCall).toBeDefined();
-			expect(toolCall!.type).toBe("toolCall");
+		const toolCall = assistantResponse.content.find((c) => c.type === "toolCall");
+		expect(toolCall).toBeDefined();
+		expect(toolCall!.type).toBe("toolCall");
 
-			// Verify it's a pipe-separated ID (OpenAI Responses format)
-			if (toolCall?.type === "toolCall") {
-				expect(toolCall.id).toContain("|");
-				console.log(`Tool call ID from openai-codex: ${toolCall.id.slice(0, 80)}...`);
-			}
+		// Verify it's a pipe-separated ID (OpenAI Responses format)
+		if (toolCall?.type === "toolCall") {
+			expect(toolCall.id).toContain("|");
+		}
 
-			// Create tool result
-			const toolResult: ToolResultMessage = {
-				role: "toolResult",
-				toolCallId: (toolCall as any).id,
-				toolName: "echo",
-				content: [{ type: "text", text: "hello world" }],
-				isError: false,
-				timestamp: Date.now(),
-			};
+		// Create tool result
+		const toolResult: ToolResultMessage = {
+			role: "toolResult",
+			toolCallId: (toolCall as any).id,
+			toolName: "echo",
+			content: [{ type: "text", text: "hello world" }],
+			isError: false,
+			timestamp: Date.now(),
+		};
 
-			// Step 2: Complete with openrouter (uses openai-completions API)
-			const openrouterResponse = await completeSimple(
-				openrouterModel,
-				{
-					systemPrompt: "You are a helpful assistant.",
-					messages: [
-						userMessage,
-						assistantResponse,
-						toolResult,
-						{ role: "user", content: "Say hi", timestamp: Date.now() },
-					],
-					tools: [echoTool],
-				},
-				{ apiKey: openrouterKey },
-			);
+		// Step 2: Complete with openrouter (uses openai-completions API)
+		const openrouterResponse = await completeSimple(
+			openrouterModel,
+			{
+				systemPrompt: "You are a helpful assistant.",
+				messages: [
+					userMessage,
+					assistantResponse,
+					toolResult,
+					{ role: "user", content: "Say hi", timestamp: Date.now() },
+				],
+				tools: [echoTool],
+			},
+			{ apiKey: openrouterKey },
+		);
 
-			// Should NOT fail with "call_id too long" error
-			expect(openrouterResponse.stopReason, `OpenRouter error: ${openrouterResponse.errorMessage}`).not.toBe(
-				"error",
-			);
-			expect(openrouterResponse.errorMessage).toBeUndefined();
-		},
-		60000,
-	);
+		// Should NOT fail with "call_id too long" error
+		expect(openrouterResponse.stopReason, `OpenRouter error: ${openrouterResponse.errorMessage}`).not.toBe("error");
+		expect(openrouterResponse.errorMessage).toBeUndefined();
+	}, 60000);
 });
 
 /**
@@ -141,7 +128,6 @@ describe("Tool Call ID Normalization - Prefilled Context", () => {
 				},
 			],
 			api: "openai-responses",
-			provider: "openai-codex",
 			model: "gpt-5.3-codex-spark",
 			usage: {
 				input: 100,
@@ -199,29 +185,24 @@ describe("Tool Call ID Normalization - Prefilled Context", () => {
 		30000,
 	);
 
-	it.skipIf(!codexToken)(
-		"openai-codex should handle prefilled context with long pipe-separated IDs",
-		async () => {
-			const model = getModel("openai-codex", "gpt-5.5");
-			const messages = buildPrefilledMessages();
+	it.skipIf(!codexToken)(async () => {
+		const messages = buildPrefilledMessages();
 
-			const response = await completeSimple(
-				model,
-				{
-					systemPrompt: "You are a helpful assistant.",
-					messages,
-					tools: [echoTool],
-				},
-				{ apiKey: codexToken },
-			);
+		const response = await completeSimple(
+			model,
+			{
+				systemPrompt: "You are a helpful assistant.",
+				messages,
+				tools: [echoTool],
+			},
+			{ apiKey: codexToken },
+		);
 
-			// Should NOT fail with ID validation error
-			expect(response.stopReason, `Codex error: ${response.errorMessage}`).not.toBe("error");
-			if (response.errorMessage) {
-				expect(response.errorMessage).not.toContain("id");
-				expect(response.errorMessage).not.toContain("additional characters");
-			}
-		},
-		30000,
-	);
+		// Should NOT fail with ID validation error
+		expect(response.stopReason, `Codex error: ${response.errorMessage}`).not.toBe("error");
+		if (response.errorMessage) {
+			expect(response.errorMessage).not.toContain("id");
+			expect(response.errorMessage).not.toContain("additional characters");
+		}
+	}, 30000);
 });

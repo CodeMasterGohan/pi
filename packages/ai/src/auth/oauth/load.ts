@@ -12,8 +12,6 @@ const importOAuthModule = (specifier: string): Promise<unknown> => {
 };
 
 type OAuthFlowLoaders = {
-	openaiCodex: () => OAuthAuth | Promise<OAuthAuth>;
-
 	openrouter: () => OAuthAuth | Promise<OAuthAuth>;
 	radius: (options: { name: string; gateway: string }) => OAuthAuth | Promise<OAuthAuth>;
 };
@@ -24,11 +22,6 @@ let bundledLoaders: OAuthFlowLoaders | undefined;
 export function registerBundledOAuthFlowLoaders(loaders: OAuthFlowLoaders): void {
 	bundledLoaders = loaders;
 }
-
-export const loadOpenAICodexOAuth = async (): Promise<OAuthAuth> => {
-	if (bundledLoaders) return bundledLoaders.openaiCodex();
-	return ((await importOAuthModule("./openai-codex.ts")) as { openaiCodexOAuth: OAuthAuth }).openaiCodexOAuth;
-};
 
 export const loadOpenRouterOAuth = async (): Promise<OAuthAuth> => {
 	if (bundledLoaders) return bundledLoaders.openrouter();

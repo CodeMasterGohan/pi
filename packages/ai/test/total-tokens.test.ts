@@ -18,10 +18,7 @@ import type { Api, Context, Model, StreamOptions, Usage } from "../src/types.ts"
 
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
-import { resolveApiKey } from "./oauth.ts";
-
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const [anthropicOAuthToken, openaiCodexToken] = oauthTokens;
 
 // Generate a long system prompt to trigger caching (>2k bytes for most providers)
@@ -582,8 +579,6 @@ describe("totalTokens field", () => {
 			"gpt-5.5 - should return totalTokens equal to sum of components",
 			{ retry: 3, timeout: 60000 },
 			async () => {
-				const llm = getModel("openai-codex", "gpt-5.5");
-
 				console.log(`\nOpenAI Codex / ${llm.id}:`);
 				const { first, second } = await testTotalTokensWithCache(llm, { apiKey: openaiCodexToken });
 

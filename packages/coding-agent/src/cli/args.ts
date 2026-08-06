@@ -302,8 +302,7 @@ ${chalk.bold("Examples:")}
   ${APP_NAME} auth print-api-key --provider openai --model gpt-5.5
 
   # Print an OAuth bearer token for an external client (refreshes if expired)
-  ${APP_NAME} auth print-bearer-token --provider openai-codex --model gpt-5.5
-
+  
   # Interactive mode
   ${APP_NAME}
 

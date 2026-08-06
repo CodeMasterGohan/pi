@@ -11,13 +11,10 @@ type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
 import { StringEnum } from "../src/utils/typebox-helpers.ts";
 
-import { resolveApiKey } from "./oauth.ts";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Resolve OAuth tokens at module level (async, runs before tests)
-const oauthTokens = await Promise.all([resolveApiKey("anthropic"), resolveApiKey("openai-codex")]);
 const openaiCodexToken = oauthTokens[1];
 
 // Calculator tool definition (same as examples)
@@ -931,8 +928,6 @@ describe("Generate E2E Tests", () => {
 	// =========================================================================
 
 	describe("OpenAI Codex Provider (gpt-5.4)", () => {
-		const llm = getModel("openai-codex", "gpt-5.4");
-
 		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm, { apiKey: openaiCodexToken });
 		});
@@ -959,8 +954,6 @@ describe("Generate E2E Tests", () => {
 	});
 
 	describe("OpenAI Codex Provider (gpt-5.5)", () => {
-		const llm = getModel("openai-codex", "gpt-5.5");
-
 		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm, { apiKey: openaiCodexToken });
 		});
@@ -987,7 +980,6 @@ describe("Generate E2E Tests", () => {
 	});
 
 	describe("OpenAI Codex Provider (gpt-5.5 via WebSocket)", () => {
-		const llm = getModel("openai-codex", "gpt-5.5");
 		const wsOptions = { apiKey: openaiCodexToken, transport: "websocket" as const };
 
 		it.skipIf(!openaiCodexToken)("should complete basic text generation", { retry: 3 }, async () => {

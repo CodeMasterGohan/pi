@@ -38,7 +38,8 @@ This document outlines the detailed step-by-step plan for removing all unused AI
   - `mistralProvider`
   - `moonshotaiProvider`, `moonshotaiCnProvider`
   - `nvidiaProvider`
-  - `openaiProvider`, `openaiCodexProvider`
+  - `openaiProvider`
+  - ~~`openaiCodexProvider`~~ — ~~removed~~
   - `opencodeProvider`, `opencodeGoProvider`
   - `qwenTokenPlanProvider`, `qwenTokenPlanCnProvider`
   - `radiusProvider`
@@ -70,7 +71,7 @@ This document outlines the detailed step-by-step plan for removing all unused AI
   - `mistral.ts`, `mistral.models.ts`
   - `moonshotai.ts`, `moonshotai.models.ts`, `moonshotai-cn.ts`, `moonshotai-cn.models.ts`
   - `nvidia.ts`, `nvidia.models.ts`
-  - `openai.ts`, `openai.models.ts`, `openai-codex.ts`, `openai-codex.models.ts`
+  - `openai.ts`, `openai.models.ts` — ~~openai-codex.ts, openai-codex.models.ts~~ ~~deleted~~ (staged in working tree)
   - `opencode.ts`, `opencode.models.ts`, `opencode-go.ts`, `opencode-go.models.ts`
   - `qwen-token-plan.ts`, `qwen-token-plan.models.ts`, `qwen-token-plan-cn.ts`, `qwen-token-plan-cn.models.ts`
   - `together.ts`, `together.models.ts` — ~~deleted~~
@@ -79,14 +80,48 @@ This document outlines the detailed step-by-step plan for removing all unused AI
   - `xiaomi.ts`, `xiaomi.models.ts`, `xiaomi-token-plan-ams.ts`, `xiaomi-token-plan-ams.models.ts`, `xiaomi-token-plan-cn.ts`, `xiaomi-token-plan-cn.models.ts`, `xiaomi-token-plan-sgp.ts`, `xiaomi-token-plan-sgp.models.ts`
   - `zai.ts`, `zai.models.ts`, `zai-coding-cn.ts`, `zai-coding-cn.models.ts`
 
-~~Also removed (staged for deletion in working tree):~~
-~~- `kimi-coding.ts`, `kimi-coding.models.ts`~~
+### C. OAuth Flow Removals ([`packages/ai/src/auth/oauth/`](file:///workspace/packages/ai/src/auth/oauth/))
+- ~~Remove `openai-codex.ts` OAuth flow (staged in working tree)~~
+- ~~Remove `kimi-coding.ts` OAuth flow ~~(committed in f019e9201)~~
+- ~~Remove `anthropic.ts` OAuth flow ~~(from earlier commit batch)~~
+- ~~Remove `azure-openai-responses` OAuth flow ~~(from earlier commit batch)~~
+- ~~Remove `github-copilot.ts` OAuth flow ~~(from earlier commit batch)~~
+- ~~Remove `xai.ts` OAuth flow ~~(from earlier commit batch)~~
 
-### C. Static Model Catalog Generation ([`packages/ai/scripts/generate-models.ts`](file:///workspace/packages/ai/scripts/generate-models.ts))
+### D. OAuth Loader Cleanup ([`packages/ai/src/auth/oauth/load.ts`](file:///workspace/packages/ai/src/auth/oauth/load.ts))
+- ~~Remove `openaiCodex`/`kimiCoding` OAuth loaders ~~(staged in working tree)~~
+- ~~Remove `loadOpenAICodexOAuth` function ~~(staged in working tree)~~
+- ~~Remove `loadKimiCodingOAuth` function ~~(committed in f019e9201)~~
+
+### E. Bundled OAuth Flows ([`packages/ai/src/bun-oauth.ts`](file:///workspace/packages/ai/src/bun-oauth.ts))
+- ~~Remove `openaiCodex` and `kimiCoding` from `registerBunOAuthFlows` ~~(staged in working tree)~~
+
+### F. Environment Variable Cleanup ([`packages/ai/src/env-api-keys.ts`](file:///workspace/packages/ai/src/env-api-keys.ts))
+- ~~Remove `KIMI_API_KEY` entry ~~(committed in f019e9201)~~
+
+### G. Model Catalog Cleanup ([`packages/ai/scripts/generate-models.ts`](file:///workspace/packages/ai/scripts/generate-models.ts))
 - Update [`generate-models.ts`](file:///workspace/packages/ai/scripts/generate-models.ts) to restrict model generation output strictly to `openrouter` entries.
-- Regenerate [`packages/ai/src/models.generated.ts`](file:///workspace/packages/ai/src/models.generated.ts) to strip unused provider metadata.
 
-### D. Local vLLM Provider Definition
+### H. Type Definition Cleanup ([`packages/ai/src/types.ts`](file:///workspace/packages/ai/src/types.ts))
+- ~~Remove `openai-codex` from `KnownProvider` ~~(staged in working tree)~~
+- Remove remaining non-OpenRouter provider entries from `KnownProvider`
+
+### I. Generated Models Catalog ([`packages/ai/src/models.generated.ts`](file:///workspace/packages/ai/src/models.generated.ts))
+- Regenerate to strip unused provider metadata.
+- ~~Remove `kimi-coding` entries ~~(committed in f019e9201)~~
+- ~~Remove `openai-codex` entries ~~(staged in working tree)~~
+
+### J. Model Default Resolution ([`packages/coding-agent/src/core/model-resolver.ts`](file:///workspace/packages/coding-agent/src/core/model-resolver.ts))
+- ~~Remove `kimi-coding` default model entry ~~(committed in f019e9201)~~
+- Remove remaining non-OpenRouter default model entries
+
+### K. CLI Args Cleanup ([`packages/coding-agent/src/cli/args.ts`](file:///workspace/packages/coding-agent/src/cli/args.ts))
+- ~~Remove `KIMI_API_KEY` from environment variable listing ~~(committed in f019e9201)~~
+
+### L. Footer Component Cleanup ([`packages/coding-agent/src/modes/interactive/components/footer.ts`](file:///workspace/packages/coding-agent/src/modes/interactive/components/footer.ts))
+- ~~Remove kimi-coding subscription check ~~(committed in f019e9201)~~
+
+### M. Local vLLM Provider Definition
 - Ensure OpenAI completions format adapter [`openai-completions.ts`](file:///workspace/packages/ai/src/api/openai-completions.ts) remains available so vLLM can be registered via `models.json` (per [`models.md`](file:///workspace/packages/coding-agent/docs/models.md#L3)).
 
 ---

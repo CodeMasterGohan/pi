@@ -33,7 +33,6 @@ export type KnownProvider =
 	| "google"
 	| "google-vertex"
 	| "openai"
-	| "openai-codex"
 	| "radius"
 	| "nvidia"
 	| "openrouter"

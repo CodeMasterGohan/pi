@@ -4,10 +4,7 @@ import type { Api, Context, Model, StreamOptions } from "../src/types.ts";
 
 type StreamOptionsWithExtras = StreamOptions & Record<string, unknown>;
 
-import { resolveApiKey } from "./oauth.ts";
-
 // Resolve OAuth tokens at module level (async, runs before tests)
-const openaiCodexToken = await resolveApiKey("openai-codex");
 
 async function testTokensOnAbort<TApi extends Api>(llm: Model<TApi>, options: StreamOptionsWithExtras = {}) {
 	const context: Context = {
@@ -219,7 +216,6 @@ describe("Token Statistics on Abort", () => {
 			"gpt-5.5 - should include token stats when aborted mid-stream",
 			{ retry: 3, timeout: 30000 },
 			async () => {
-				const llm = getModel("openai-codex", "gpt-5.5");
 				await testTokensOnAbort(llm, { apiKey: openaiCodexToken });
 			},
 		);
