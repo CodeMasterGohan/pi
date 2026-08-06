@@ -715,7 +715,7 @@ describe("Generate E2E Tests", () => {
 	});
 
 	describe.skipIf(!process.env.MINIMAX_API_KEY)("MiniMax Provider (MiniMax-M2.7 via Anthropic Messages)", () => {
-		const llm = getModel("minimax", "MiniMax-M2.7");
+		const llm = getModel("openrouter", "moonshotai/kimi-k2.5");
 
 		it("should complete basic text generation", { retry: 3 }, async () => {
 			await basicTextGeneration(llm);

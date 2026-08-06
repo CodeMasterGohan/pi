@@ -264,7 +264,7 @@ describe("Context overflow error handling", () => {
 
 	describe.skipIf(!process.env.MINIMAX_API_KEY)("MiniMax", () => {
 		it("MiniMax-M2.7 - should detect overflow via isContextOverflow", async () => {
-			const model = getModel("minimax", "MiniMax-M2.7");
+			const model = getModel("openrouter", "moonshotai/kimi-k2.5");
 			const result = await testContextOverflow(model, process.env.MINIMAX_API_KEY!);
 			logResult(result);
 

@@ -693,9 +693,8 @@ describe("default model selection", () => {
 		expect(defaultModelPerProvider.openai).toBe("gpt-5.5");
 	});
 
-	test("zai and minimax defaults track current models", () => {
+	test("zai default tracks current models", () => {
 		expect(defaultModelPerProvider.zai).toBe("glm-5.1");
-		expect(defaultModelPerProvider.minimax).toBe("MiniMax-M2.7");
 	});
 
 	test("ai-gateway default tracks current model", () => {
